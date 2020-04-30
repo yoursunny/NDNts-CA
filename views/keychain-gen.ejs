@@ -1,0 +1,26 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>Generate a Key</h1>
+
+<form action="keychain-gen.cgi" method="post" class="pure-form pure-form-stacked">
+<fieldset>
+
+<label for="f_name">Subject Name</label>
+<input id="f_name" name="name" type="text" required placeholder="/example">
+
+<label>EC curve</label>
+<label class="pure-radio"><input type="radio" name="curve" value="P-256" checked> P-256</label>
+<label class="pure-radio"><input type="radio" name="curve" value="P-384"> P-384</label>
+
+<button type="submit" class="pure-button pure-button-primary">Submit</button>
+
+</fieldset>
+</form>
+
+</div>
+</main>
+
+<%- include("_footer") %>

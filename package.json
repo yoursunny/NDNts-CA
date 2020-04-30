@@ -1,3 +1,34 @@
 {
-  "private": true
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "lint": "xo --fix",
+    "start": "nodemon -x \"node --experimental-modules\" -w .env -w src server.js"
+  },
+  "dependencies": {
+    "@ndn/cli-common": "https://ndnts-nightly.netlify.app/cli-common.tgz",
+    "@ndn/endpoint": "https://ndnts-nightly.netlify.app/endpoint.tgz",
+    "@ndn/keychain": "https://ndnts-nightly.netlify.app/keychain.tgz",
+    "@ndn/naming-convention2": "https://ndnts-nightly.netlify.app/naming-convention2.tgz",
+    "@ndn/ndncert": "https://ndnts-nightly.netlify.app/ndncert.tgz",
+    "@ndn/nfdmgmt": "https://ndnts-nightly.netlify.app/nfdmgmt.tgz",
+    "@ndn/packet": "https://ndnts-nightly.netlify.app/packet.tgz",
+    "@ndn/repo": "https://ndnts-nightly.netlify.app/repo.tgz",
+    "@ndn/tlv": "https://ndnts-nightly.netlify.app/tlv.tgz",
+    "@strattadb/environment": "^8.0.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "envfile": "^5.0.0",
+    "express": "^4.17.1",
+    "fast-chunk-string": "^1.0.1",
+    "graceful-fs": "^4.2.4",
+    "hard-rejection": "^2.1.0",
+    "leveldown": "^5.6.0",
+    "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "xo": "^0.30.0"
+  }
 }

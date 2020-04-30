@@ -1,0 +1,20 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>NDNts Personal CA</h1>
+
+<% if (profile) { -%>
+<p>Certificate Authority running at <kbd><%= helper.altUri(profile.prefix) %></kbd>.</p>
+<p><a href="profile.data">Download</a> or <a href="profile.txt">view</a> CA profile.</p>
+<% } else { -%>
+<p>Certificate Authority inactive.</p>
+<% } -%>
+<p><a href="profile-new.html">Create new CA profile</a>.</p>
+<p><a href="keychain-list.html">Manage CA keychain</a>.</p>
+
+</div>
+</main>
+
+<%- include("_footer") %>

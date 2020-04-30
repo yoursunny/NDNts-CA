@@ -1,0 +1,52 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>CA KeyChain</h1>
+
+<table class="pure-table pure-table-horizontal">
+<thead>
+<tr><th colspan="2">name</th><th>actions</th></tr>
+</thead>
+<tbody>
+<% for (const keyName of keyNames) { -%>
+<tr>
+  <td colspan="2"><%= helper.altUri(keyName) %></td>
+  <td>
+    <form action="keychain-delete-key.cgi" method="post">
+      <input type="hidden" name="name" value="<%= keyName %>">
+      <button type="submit" class="pure-button" title="delete key">delete</button>
+    </form>
+    <form action="keychain-selfsign.cgi" method="post">
+      <input type="hidden" name="name" value="<%= keyName %>">
+      <button type="submit" class="pure-button" title="create self-signed certificate">self sign</button>
+    </form>
+    <form action="keychain-req.html" method="get">
+      <input type="hidden" name="name" value="<%= keyName %>">
+      <button type="submit" class="pure-button" title="request a certificate from another CA">request cert</button>
+    </form>
+  </td>
+</tr>
+<% for (const certName of certNames.filter((n) => keyName.isPrefixOf(n))) { -%>
+<tr>
+  <td>&nbsp;</td>
+  <td><%= helper.altUri(certName) %></td>
+  <td>
+    <form action="keychain-delete-cert.cgi" method="post">
+      <input type="hidden" name="name" value="<%= certName %>">
+      <button type="submit" class="pure-button" title="delete certificate">delete</button>
+    </form>
+  </td>
+</tr>
+<% } -%>
+<% } -%>
+</tbody>
+</table>
+
+<p><a href="keychain-gen.html" class="pure-button pure-button-primary">Generate Key</a></p>
+
+</div>
+</main>
+
+<%- include("_footer") %>
