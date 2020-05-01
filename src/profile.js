@@ -1,6 +1,6 @@
 import { CaProfile } from "@ndn/ndncert";
 import { Data, Name } from "@ndn/packet";
-import { Encoder } from "@ndn/tlv";
+import { Encoder, fromHex } from "@ndn/tlv";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
 import { message } from "./helper.js";
@@ -41,7 +41,7 @@ async function newForm(req, res) {
 
 /** @type {import("express").Handler} */
 async function newSubmit(req, res) {
-  const cert = await keyChain.getCert(new Name(req.body.cert));
+  const cert = await keyChain.getCert(new Name(fromHex(req.body.cert)));
   const signer = await keyChain.getPrivateKey(cert.certName.toKeyName().toName());
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);

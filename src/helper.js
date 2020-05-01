@@ -1,9 +1,24 @@
 import { AltUri } from "@ndn/naming-convention2";
+import { toHex } from "@ndn/tlv";
 
 /** @param {import("express").Express} app */
 export function registerViewHelpers(app) {
   app.locals.helper = {
-    altUri(name) { return AltUri.ofName(name); },
+    /**
+     * @param {import("@ndn/packet".Name)} name
+     * @returns string
+     */
+    altUri(name) {
+      return AltUri.ofName(name);
+    },
+
+    /**
+     * @param {import("@ndn/packet".Name)} name
+     * @returns string
+     */
+    nameHex(name) {
+      return toHex(name.value);
+    },
   };
 }
 

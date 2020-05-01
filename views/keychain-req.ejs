@@ -12,7 +12,7 @@ This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with Va
 </pre>
 
 <form action="keychain-req.html" method="get" class="pure-form">
-<input type="hidden" name="name" value="<%= name %>">
+<input type="hidden" name="name" value="<%= helper.nameHex(name) %>">
 <fieldset>
 <legend>Change ValidityPeriod</legend>
 <label for="f_days">Days</label>
@@ -25,7 +25,7 @@ This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with Va
 <p>
 If you have a parent key in an ndn-cxx KeyChain, you may create a certificate with <kbd>ndnsec cert-gen</kbd> command.
 In order for the NDN testbed to accept the certificate, subject name of the parent key must be a prefix of <kbd><%= helper.altUri(subjectName) %></kbd>.
-Example command (assuming the parent key is in NFD keychain):
+Example command (assuming the parent key is named <kbd><%= helper.altUri(subjectName.getPrefix(-1)) %></kbd> in NFD keychain):
 </p>
 <pre>
 sudo HOME=/var/lib/ndn/nfd -u ndn ndnsec cert-gen -s <%= subjectName.getPrefix(-1) %> &lt;&lt;-EOT

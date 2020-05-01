@@ -1,7 +1,8 @@
 import { Certificate, EcPrivateKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
+import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Data, Name } from "@ndn/packet";
-import { Decoder, Encoder } from "@ndn/tlv";
+import { Decoder, Encoder, fromHex } from "@ndn/tlv";
 
 import { keyChain } from "./env.js";
 import { message, template } from "./helper.js";
@@ -21,7 +22,7 @@ async function list(req, res) {
 
 /** @type {import("express").Handler} */
 async function deleteKey(req, res) {
-  const name = new Name(req.body.name);
+  const name = new Name(fromHex(req.body.name));
   await keyChain.deleteKey(name);
   message(`Key ${AltUri.ofName(name)} deleted.`,
     { next: KEYCHAIN_LIST_URI })(req, res);
@@ -29,7 +30,7 @@ async function deleteKey(req, res) {
 
 /** @type {import("express").Handler} */
 async function deleteCert(req, res) {
-  const name = new Name(req.body.name);
+  const name = new Name(fromHex(req.body.name));
   await keyChain.deleteCert(name);
   message(`Certificate ${AltUri.ofName(name)} deleted.`,
     { next: KEYCHAIN_LIST_URI })(req, res);
@@ -37,7 +38,7 @@ async function deleteCert(req, res) {
 
 /** @type {import("express").Handler} */
 async function selfSign(req, res) {
-  const name = new Name(req.body.name);
+  const name = new Name(fromHex(req.body.name));
   const [privateKey, publicKey] = await keyChain.getKeyPair(name);
   const cert = await Certificate.selfSign({ privateKey, publicKey });
   await keyChain.insertCert(cert);
@@ -59,7 +60,7 @@ async function genKey(req, res) {
 
 /** @type {import("express").Handler} */
 async function reqForm(req, res) {
-  const name = new Name(req.query.name);
+  const name = new Name(fromHex(req.query.name));
   let days = Number.parseInt(req.query.days, 10);
   if (!days) {
     days = 30;
@@ -91,6 +92,13 @@ async function insertCert(req, res) {
   message(`Certificate ${AltUri.ofName(cert.name)} installed.`, { next: KEYCHAIN_LIST_URI })(req, res);
 }
 
+/** @type {import("express").Handler} */
+async function importNdnsec(req, res) {
+  const ndnsecKeychain = new NdnsecKeyChain();
+  await ndnsecKeychain.copyTo(keyChain);
+  message("Keys and certificates have been imported.", { next: KEYCHAIN_LIST_URI })(req, res);
+}
+
 /** @param {import("express").Express} app */
 export function register(app) {
   app.get("/keychain-list.html", list);
@@ -103,4 +111,7 @@ export function register(app) {
 
   app.get("/keychain-req.html", reqForm);
   app.post("/keychain-insert-cert.cgi", insertCert);
+
+  app.get("/keychain-import-ndnsec.html", template("keychain-import-ndnsec"));
+  app.post("/keychain-import-ndnsec.cgi", importNdnsec);
 }

@@ -15,15 +15,15 @@
   <td colspan="2"><%= helper.altUri(keyName) %></td>
   <td>
     <form action="keychain-delete-key.cgi" method="post">
-      <input type="hidden" name="name" value="<%= keyName %>">
+      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
       <button type="submit" class="pure-button" title="delete key">delete</button>
     </form>
     <form action="keychain-selfsign.cgi" method="post">
-      <input type="hidden" name="name" value="<%= keyName %>">
+      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
       <button type="submit" class="pure-button" title="create self-signed certificate">self sign</button>
     </form>
     <form action="keychain-req.html" method="get">
-      <input type="hidden" name="name" value="<%= keyName %>">
+      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
       <button type="submit" class="pure-button" title="request a certificate from another CA">request cert</button>
     </form>
   </td>
@@ -34,7 +34,7 @@
   <td><%= helper.altUri(certName) %></td>
   <td>
     <form action="keychain-delete-cert.cgi" method="post">
-      <input type="hidden" name="name" value="<%= certName %>">
+      <input type="hidden" name="name" value="<%= helper.nameHex(certName) %>">
       <button type="submit" class="pure-button" title="delete certificate">delete</button>
     </form>
   </td>
@@ -44,7 +44,10 @@
 </tbody>
 </table>
 
-<p><a href="keychain-gen.html" class="pure-button pure-button-primary">Generate Key</a></p>
+<p>
+<a href="keychain-gen.html" class="pure-button pure-button-primary">Generate Key</a>
+<a href="keychain-import-ndnsec.html" class="pure-button">Import from ndnsec</a>
+</p>
 
 </div>
 </main>

@@ -11,6 +11,7 @@
     "@ndn/keychain": "https://ndnts-nightly.netlify.app/keychain.tgz",
     "@ndn/naming-convention2": "https://ndnts-nightly.netlify.app/naming-convention2.tgz",
     "@ndn/ndncert": "https://ndnts-nightly.netlify.app/ndncert.tgz",
+    "@ndn/ndnsec": "https://ndnts-nightly.netlify.app/ndnsec.tgz",
     "@ndn/nfdmgmt": "https://ndnts-nightly.netlify.app/nfdmgmt.tgz",
     "@ndn/packet": "https://ndnts-nightly.netlify.app/packet.tgz",
     "@ndn/repo": "https://ndnts-nightly.netlify.app/repo.tgz",
