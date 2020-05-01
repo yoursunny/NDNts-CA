@@ -8,7 +8,7 @@
 This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with ValidityPeriod <kbd><%= cert.validity %></kbd>.
 </p>
 <pre>
-<%= certreq %>
+<%= helper.certBase64(cert) %>
 </pre>
 
 <form action="keychain-req.html" method="get" class="pure-form">
@@ -23,13 +23,13 @@ This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with Va
 
 <h2>Obtain certificate from ndnsec</h2>
 <p>
-If you have a parent key in an ndn-cxx KeyChain, you may create a certificate with <kbd>ndnsec cert-gen</kbd> command.
+If you have a parent key in ndn-cxx KeyChain, you may create a certificate with <kbd>ndnsec cert-gen</kbd> command.
 In order for the NDN testbed to accept the certificate, subject name of the parent key must be a prefix of <kbd><%= helper.altUri(subjectName) %></kbd>.
 Example command (assuming the parent key is named <kbd><%= helper.altUri(subjectName.getPrefix(-1)) %></kbd> in NFD keychain):
 </p>
 <pre>
 sudo HOME=/var/lib/ndn/nfd -u ndn ndnsec cert-gen -s <%= subjectName.getPrefix(-1) %> &lt;&lt;-EOT
-<%= certreq %>
+<%= helper.certBase64(cert) %>
 EOT
 </pre>
 
@@ -37,18 +37,18 @@ EOT
 <p>
 You may request a certificate from <a href="https://ndncert.named-data.net/">ndncert-legacy system</a>.
 The subject name of this key is <kbd><%= helper.altUri(subjectName) %></kbd>.
-It must equal the name suggested by ndncert-legacy or your request will be denied.
+If ndncert-legacy suggested a different subject name, <a href="keychain-gen.html">generate a new key</a> and make certificate request from that key instead.
 </p>
 
 <h2>Install certificate</h2>
 <p>Once you have obtained the certificate, enter it here:</p>
 <form action="keychain-insert-cert.cgi" method="post" class="pure-form">
-<form class="pure-form">
 <fieldset class="pure-group">
 <textarea rows="6" cols="70" style="font-family:monospace;" name="cert" required placeholder="base64 certificate"></textarea>
 </fieldset>
 <button type="submit" class="pure-button pure-button-primary">Save</button>
 </form>
+
 </div>
 </main>
 

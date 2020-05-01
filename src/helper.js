@@ -1,5 +1,11 @@
+import { Certificate } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
-import { toHex } from "@ndn/tlv";
+import { Data, Name } from "@ndn/packet";
+import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
+
+import { require } from "./require.js";
+/** @type import("fast-chunk-string") */
+const fastChunkString = require("fast-chunk-string");
 
 /** @param {import("express").Express} app */
 export function registerViewHelpers(app) {
@@ -19,13 +25,46 @@ export function registerViewHelpers(app) {
     nameHex(name) {
       return toHex(name.value);
     },
+
+    /**
+     * @param {Certificate)} cert
+     * @returns string
+     */
+    certBase64(cert) {
+      const b64 = Buffer.from(Encoder.encode(cert.data)).toString("base64");
+      return fastChunkString(b64, { size: 64 }).join("\n");
+    },
   };
+}
+
+/**
+ * Parse hex name from query or body.
+ * @param {string} input
+ * @returns Name
+ */
+export function nameFromHex(input) {
+  return new Name(fromHex(input));
+}
+
+/**
+ * Parse base64 certificate from query or body.
+ * @param {string} input
+ * @returns Certificate
+ */
+export function certFromBase64(input) {
+  try {
+    const buffer = Buffer.from(input, "base64");
+    const data = new Decoder(buffer).decode(Data);
+    return new Certificate(data);
+  } catch {
+    throw new Error("invalid certificate");
+  }
 }
 
 /**
  * Wrap an async Express handler with error handling.
  * @param {import("express").Handler} asyncHandler
- * @return import("express").Handler
+ * @returns import("express").Handler
  */
 export function handleError(asyncHandler) {
   return (req, res, next) => {
@@ -38,7 +77,7 @@ export function handleError(asyncHandler) {
  * Render a template.
  * @param {string} view
  * @param {object} options
- * @return {import("express").Handler}
+ * @returns {import("express").Handler}
  */
 export function template(view, options) {
   return (req, res) => {
@@ -57,7 +96,7 @@ const MESSAGE_NEXT = {
  * @param {object} opts
  * @param {string} opts.title
  * @param {"home"|"back"|string} opts.next
- * @return {import("express").Handler}
+ * @returns {import("express").Handler}
  */
 export function message(message, opts = {}) {
   const {

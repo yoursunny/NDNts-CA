@@ -4,6 +4,7 @@ import express from "express";
 import { env, initialize, profile } from "./env.js";
 import { registerViewHelpers, template } from "./helper.js";
 import { register as keychainRoutes } from "./keychain.js";
+import { register as manualRoutes } from "./manual.js";
 import { register as profileRoutes } from "./profile.js";
 
 (async () => {
@@ -20,6 +21,7 @@ app.get("/", template("frontpage"));
 
 profileRoutes(app);
 keychainRoutes(app);
+manualRoutes(app);
 
 app.listen(env.httpport);
 console.log(`http://localhost:${env.httpport}`);

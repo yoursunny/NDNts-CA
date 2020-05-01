@@ -1,0 +1,25 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>Certificate Issued</h1>
+<p>Name: <kbd><%= helper.altUri(cert.name) %></kbd></p>
+<p>Issuer: <kbd><%= helper.altUri(cert.data.sigInfo.keyLocator) %></kbd></p>
+<p>ValidityPeriod: <kbd><%= cert.validity %></kbd></p>
+<pre>
+<%= helper.certBase64(cert) %>
+</pre>
+
+<h2>Import to ndnsec</h2>
+<p>If you want to use this certificate in ndn-cxx, you can import the certificate with this command:</p>
+<pre>
+ndnsec cert-install -f- &lt;&lt;-EOT
+<%= helper.certBase64(cert) %>
+EOT
+</pre>
+
+</div>
+</main>
+
+<%- include("_footer") %>

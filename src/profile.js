@@ -1,9 +1,9 @@
 import { CaProfile } from "@ndn/ndncert";
-import { Data, Name } from "@ndn/packet";
-import { Encoder, fromHex } from "@ndn/tlv";
+import { Data } from "@ndn/packet";
+import { Encoder } from "@ndn/tlv";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
-import { handleError, message, template } from "./helper.js";
+import { handleError, message, nameFromHex, template } from "./helper.js";
 import { require } from "./require.js";
 /** @type import("graceful-fs") */
 const { promises: fs } = require("graceful-fs");
@@ -41,7 +41,7 @@ async function newForm(req, res) {
 
 /** @type {import("express").Handler} */
 async function newSubmit(req, res) {
-  const cert = await keyChain.getCert(new Name(fromHex(req.body.cert)));
+  const cert = await keyChain.getCert(nameFromHex(req.body.cert));
   const signer = await keyChain.getPrivateKey(cert.certName.toKeyName().toName());
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);

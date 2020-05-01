@@ -1,0 +1,39 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>Submit Certificate Request</h1>
+<p>
+This CA runs NDNCERT 0.3 server and you may use any NDNCERT 0.3 client to request a certificate from this CA.
+Alternatively, you can paste a certificate request here and manually issue a certificate.
+</p>
+
+<form action="manual-submit.cgi" method="post" class="pure-form pure-form-stacked">
+<fieldset>
+<label for="f_certreq">certificate request in base64 format</label>
+<textarea rows="6" cols="70" style="font-family:monospace;" id="f_certreq" name="certreq" required></textarea>
+
+<label for="f_issuer">issuer certificate</label>
+<select id="f_issuer" name="issuer" required>
+<% for (const certName of certNames) { -%>
+<option value="<%= helper.nameHex(certName) %>"<%- profile && profile.cert.name.equals(certName) ? " selected" : "" %>><%= helper.altUri(certName) %></option>
+<% } -%>
+</select>
+<span class="pure-form-message">NDN testbed only accepts a certificate if its issuer's subject name is a prefix of the certificate's subject name.</span>
+
+<label for="f_validdays">validity period (days)</label>
+<input id="f_validdays" name="validdays" type="number" value="30" min="1" max="720">
+
+<button type="submit" class="pure-button pure-button-primary">Issue Certificate</button>
+</fieldset>
+</form>
+
+<h2>Generate request with ndnsec</h2>
+<p>If you want to create a certificate for use in ndn-cxx, generate a certificate request with this command:</p>
+<pre>ndnsec key-gen -te <%= profile ? profile.cert.certName.subjectName : "/localhost" %>/$(hostname -s)</pre>
+
+</div>
+</main>
+
+<%- include("_footer") %>

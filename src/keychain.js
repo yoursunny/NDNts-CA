@@ -1,14 +1,10 @@
 import { Certificate, EcPrivateKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
-import { Data, Name } from "@ndn/packet";
-import { Decoder, Encoder, fromHex } from "@ndn/tlv";
+import { Name } from "@ndn/packet";
 
 import { keyChain } from "./env.js";
-import { handleError, message, template } from "./helper.js";
-import { require } from "./require.js";
-/** @type import("fast-chunk-string") */
-const fastChunkString = require("fast-chunk-string");
+import { certFromBase64, handleError, message, nameFromHex, template } from "./helper.js";
 
 const KEYCHAIN_LIST_URI = "keychain-list.html";
 
@@ -22,7 +18,7 @@ async function list(req, res) {
 
 /** @type {import("express").Handler} */
 async function deleteKey(req, res) {
-  const name = new Name(fromHex(req.body.name));
+  const name = nameFromHex(req.body.name);
   await keyChain.deleteKey(name);
   message(`Key ${AltUri.ofName(name)} deleted.`,
     { next: KEYCHAIN_LIST_URI })(req, res);
@@ -30,7 +26,7 @@ async function deleteKey(req, res) {
 
 /** @type {import("express").Handler} */
 async function deleteCert(req, res) {
-  const name = new Name(fromHex(req.body.name));
+  const name = nameFromHex(req.body.name);
   await keyChain.deleteCert(name);
   message(`Certificate ${AltUri.ofName(name)} deleted.`,
     { next: KEYCHAIN_LIST_URI })(req, res);
@@ -38,7 +34,7 @@ async function deleteCert(req, res) {
 
 /** @type {import("express").Handler} */
 async function selfSign(req, res) {
-  const name = new Name(fromHex(req.body.name));
+  const name = nameFromHex(req.body.name);
   const [privateKey, publicKey] = await keyChain.getKeyPair(name);
   const cert = await Certificate.selfSign({ privateKey, publicKey });
   await keyChain.insertCert(cert);
@@ -60,7 +56,7 @@ async function genKey(req, res) {
 
 /** @type {import("express").Handler} */
 async function reqForm(req, res) {
-  const name = new Name(fromHex(req.query.name));
+  const name = nameFromHex(req.query.name);
   let days = Number.parseInt(req.query.days, 10);
   if (!days) {
     days = 30;
@@ -69,25 +65,13 @@ async function reqForm(req, res) {
   const [privateKey, publicKey] = await keyChain.getKeyPair(name);
   const validity = ValidityPeriod.daysFromNow(days);
   const cert = await Certificate.selfSign({ privateKey, publicKey, validity });
-  const certreq = fastChunkString(Buffer.from(Encoder.encode(cert.data)).toString("base64"),
-    { size: 64 }).join("\n");
-
   const { subjectName } = cert.certName;
-  template("keychain-req", { name, days, cert, certreq, subjectName })(req, res);
+  template("keychain-req", { name, days, cert, subjectName })(req, res);
 }
 
 /** @type {import("express").Handler} */
 async function insertCert(req, res) {
-  /** @type Certificate */
-  let cert;
-  try {
-    const buffer = Buffer.from(req.body.cert, "base64");
-    const data = new Decoder(buffer).decode(Data);
-    cert = new Certificate(data);
-  } catch {
-    message("Invalid certificate.", { next: "back" })(req, res);
-    return;
-  }
+  const cert = certFromBase64(req.body.cert);
   await keyChain.insertCert(cert);
   message(`Certificate ${AltUri.ofName(cert.name)} installed.`, { next: KEYCHAIN_LIST_URI })(req, res);
 }
