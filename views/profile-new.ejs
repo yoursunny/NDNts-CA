@@ -22,6 +22,9 @@
 <input id="f_validdays" name="validdays" type="number" value="30" min="1" max="720">
 
 <button type="submit" class="pure-button pure-button-primary">Submit</button>
+<% if (profile) { -%>
+<span class="pure-form-message">This will stop the existing CA at <kbd><%= helper.altUri(profile.prefix) %></kbd></span>
+<% } -%>
 
 </fieldset>
 </form>

@@ -14,7 +14,7 @@
 <tr>
   <td colspan="2"><%= helper.altUri(keyName) %></td>
   <td>
-    <form action="keychain-delete-key.cgi" method="post">
+    <form action="keychain-delete-key.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete key <%= helper.altUri(keyName) %>?')">
       <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
       <button type="submit" class="pure-button" title="delete key">delete</button>
     </form>
@@ -33,7 +33,7 @@
   <td>&nbsp;</td>
   <td><%= helper.altUri(certName) %></td>
   <td>
-    <form action="keychain-delete-cert.cgi" method="post">
+    <form action="keychain-delete-cert.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete certificate <%= helper.altUri(certName) %>?')">
       <input type="hidden" name="name" value="<%= helper.nameHex(certName) %>">
       <button type="submit" class="pure-button" title="delete certificate">delete</button>
     </form>
