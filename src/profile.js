@@ -3,7 +3,7 @@ import { Data, Name } from "@ndn/packet";
 import { Encoder, fromHex } from "@ndn/tlv";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
-import { message } from "./helper.js";
+import { handleError, message, template } from "./helper.js";
 import { require } from "./require.js";
 /** @type import("graceful-fs") */
 const { promises: fs } = require("graceful-fs");
@@ -34,9 +34,9 @@ export async function show(req, res) {
 
 /** @type {import("express").Handler} */
 async function newForm(req, res) {
-  res.render("profile-new", {
+  template("profile-new", {
     certNames: await keyChain.listCerts(),
-  });
+  })(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -68,9 +68,9 @@ async function newSubmit(req, res) {
 
 /** @param {import("express").Express} app */
 export function register(app) {
-  app.get("/profile.data", download);
-  app.get("/profile.txt", show);
+  app.get("/profile.data", handleError(download));
+  app.get("/profile.txt", handleError(show));
 
-  app.get("/profile-new.html", newForm);
-  app.post("/profile-new.cgi", newSubmit);
+  app.get("/profile-new.html", handleError(newForm));
+  app.post("/profile-new.cgi", handleError(newSubmit));
 }

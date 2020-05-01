@@ -23,6 +23,18 @@ export function registerViewHelpers(app) {
 }
 
 /**
+ * Wrap an async Express handler with error handling.
+ * @param {import("express").Handler} asyncHandler
+ * @return import("express").Handler
+ */
+export function handleError(asyncHandler) {
+  return (req, res, next) => {
+    Promise.resolve(asyncHandler(req, res, next))
+      .catch(next);
+  };
+}
+
+/**
  * Render a template.
  * @param {string} view
  * @param {object} options

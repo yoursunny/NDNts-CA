@@ -5,7 +5,7 @@ import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex } from "@ndn/tlv";
 
 import { keyChain } from "./env.js";
-import { message, template } from "./helper.js";
+import { handleError, message, template } from "./helper.js";
 import { require } from "./require.js";
 /** @type import("fast-chunk-string") */
 const fastChunkString = require("fast-chunk-string");
@@ -14,10 +14,10 @@ const KEYCHAIN_LIST_URI = "keychain-list.html";
 
 /** @type {import("express").Handler} */
 async function list(req, res) {
-  res.render("keychain-list", {
+  template("keychain-list", {
     keyNames: await keyChain.listKeys(),
     certNames: await keyChain.listCerts(),
-  });
+  })(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -101,17 +101,17 @@ async function importNdnsec(req, res) {
 
 /** @param {import("express").Express} app */
 export function register(app) {
-  app.get("/keychain-list.html", list);
-  app.post("/keychain-delete-key.cgi", deleteKey);
-  app.post("/keychain-delete-cert.cgi", deleteCert);
-  app.post("/keychain-selfsign.cgi", selfSign);
+  app.get("/keychain-list.html", handleError(list));
+  app.post("/keychain-delete-key.cgi", handleError(deleteKey));
+  app.post("/keychain-delete-cert.cgi", handleError(deleteCert));
+  app.post("/keychain-selfsign.cgi", handleError(selfSign));
 
   app.get("/keychain-gen.html", template("keychain-gen"));
-  app.post("/keychain-gen.cgi", genKey);
+  app.post("/keychain-gen.cgi", handleError(genKey));
 
-  app.get("/keychain-req.html", reqForm);
-  app.post("/keychain-insert-cert.cgi", insertCert);
+  app.get("/keychain-req.html", handleError(reqForm));
+  app.post("/keychain-insert-cert.cgi", handleError(insertCert));
 
   app.get("/keychain-import-ndnsec.html", template("keychain-import-ndnsec"));
-  app.post("/keychain-import-ndnsec.cgi", importNdnsec);
+  app.post("/keychain-import-ndnsec.cgi", handleError(importNdnsec));
 }
