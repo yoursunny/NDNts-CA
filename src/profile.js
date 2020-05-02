@@ -4,7 +4,7 @@ import { Encoder } from "@ndn/tlv";
 import { env, keyChain, modifyEnv, profile } from "./env.js";
 import { handleError, message, nameFromHex, template } from "./helper.js";
 import { require } from "./require.js";
-/** @type import("graceful-fs") */
+/** @type {import("graceful-fs")} */
 const { promises: fs } = require("graceful-fs");
 
 /** @type {import("express").Handler} */
@@ -15,7 +15,7 @@ export async function download(req, res) {
     return;
   }
   res.contentType("application/octet-stream");
-  res.write(Encoder.encode(profile.data));
+  res.write(Buffer.from(Encoder.encode(profile.data)));
   res.end();
 }
 
@@ -40,6 +40,12 @@ async function newForm(req, res) {
 
 /** @type {import("express").Handler} */
 async function newSubmit(req, res) {
+  const challenges = ["nop", "pin"].filter((challenge) => req.body[`challenge-${challenge}`] === "1");
+  if (challenges.length === 0) {
+    message("At least one challenge is required.", { next: "back" })(req, res);
+    return;
+  }
+
   const cert = await keyChain.getCert(nameFromHex(req.body.cert));
   const signer = await keyChain.getPrivateKey(cert.certName.toKeyName().toName());
   const info = String(req.body.info).trim();
@@ -62,6 +68,7 @@ async function newSubmit(req, res) {
     NDNTS_KEY: keyName,
     NDNTS_NFDREGKEY: keyName,
     CA_KEY: keyName,
+    CA_CHALLENGES: challenges,
   });
 }
 

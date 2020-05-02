@@ -4,7 +4,7 @@ import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Name } from "@ndn/packet";
 
 import { require } from "./require.js";
-/** @type import("got") */
+/** @type {import("got")} */
 const got = require("got");
 
 import { keyChain } from "./env.js";
@@ -49,7 +49,7 @@ async function selfSign(req, res) {
 /** @type {import("express").Handler} */
 async function genKey(req, res) {
   const name = new Name(req.body.name);
-  /** @type import("@ndn/keychain").EcCurve */
+  /** @type {import("@ndn/keychain").EcCurve} */
   const curve = req.body.curve;
   const [privateKey] = await EcPrivateKey.generate(name, curve, keyChain);
   message(`Key ${AltUri.ofName(privateKey.name)} generated.`,

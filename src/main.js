@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 
-import { env, initialize, profile } from "./env.js";
+import { env, initialize, profile, recentPinRequests } from "./env.js";
 import { registerViewHelpers, template } from "./helper.js";
 import { register as keychainRoutes } from "./keychain.js";
 import { register as manualRoutes } from "./manual.js";
@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.locals.profile = profile;
 registerViewHelpers(app);
 app.set("view engine", "ejs");
-app.get("/", template("frontpage"));
+app.get("/", template("frontpage", { recentPinRequests }));
 
 profileRoutes(app);
 keychainRoutes(app);

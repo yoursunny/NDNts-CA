@@ -21,9 +21,19 @@
 <label for="f_validdays">max validity period (days)</label>
 <input id="f_validdays" name="validdays" type="number" value="30" min="1" max="720">
 
+<label class="pure-checkbox">
+<input type="checkbox" name="challenge-nop" value="1">
+enable "nop" challenge: automatically approve every request
+</label>
+
+<label class="pure-checkbox">
+<input type="checkbox" name="challenge-pin" value="1" checked>
+enable "pin" challenge: client must enter a PIN code displayed on this CA
+</label>
+
 <button type="submit" class="pure-button pure-button-primary">Submit</button>
 <% if (profile) { -%>
-<span class="pure-form-message">This will stop the existing CA at <kbd><%= helper.altUri(profile.prefix) %></kbd></span>
+<span class="pure-form-message">This action will replace the existing CA at <kbd><%= helper.altUri(profile.prefix) %></kbd></span>
 <% } -%>
 
 </fieldset>

@@ -4,7 +4,7 @@ import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
 
 import { require } from "./require.js";
-/** @type import("fast-chunk-string") */
+/** @type {import("fast-chunk-string")} */
 const fastChunkString = require("fast-chunk-string");
 
 /** @param {import("express").Express} app */
@@ -12,15 +12,17 @@ export function registerViewHelpers(app) {
   app.locals.helper = {
     /**
      * @param {import("@ndn/packet".Name)} name
-     * @returns string
+     * @returns {string}
      */
     altUri(name) {
       return AltUri.ofName(name);
     },
 
+    toHex,
+
     /**
      * @param {import("@ndn/packet".Name)} name
-     * @returns string
+     * @returns {string}
      */
     nameHex(name) {
       return toHex(name.value);
@@ -28,7 +30,7 @@ export function registerViewHelpers(app) {
 
     /**
      * @param {Certificate)} cert
-     * @returns string
+     * @returns {string}
      */
     certBase64(cert) {
       const b64 = Buffer.from(Encoder.encode(cert.data)).toString("base64");
@@ -40,7 +42,7 @@ export function registerViewHelpers(app) {
 /**
  * Parse hex name from query or body.
  * @param {string} input
- * @returns Name
+ * @returns {Name}
  */
 export function nameFromHex(input) {
   return new Name(fromHex(input));
@@ -49,7 +51,7 @@ export function nameFromHex(input) {
 /**
  * Parse base64 certificate from query or body.
  * @param {string} input
- * @returns Certificate
+ * @returns {Certificate}
  */
 export function certFromBase64(input) {
   try {
@@ -64,7 +66,7 @@ export function certFromBase64(input) {
 /**
  * Wrap an async Express handler with error handling.
  * @param {import("express").Handler} asyncHandler
- * @returns import("express").Handler
+ * @returns {import("express").Handler}
  */
 export function handleError(asyncHandler) {
   return (req, res, next) => {

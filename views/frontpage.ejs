@@ -15,6 +15,20 @@
 <p><a href="keychain-list.html">Manage CA keychain</a>.</p>
 <p><a href="manual-request.html">Submit a certificate request</a>.</p>
 
+<% if (recentPinRequests) { -%>
+<h2>Recent PIN Requests</h2>
+<table class="pure-table pure-table-horizontal">
+<thead>
+<tr><th>request ID</th><th>PIN</th></tr>
+</thead>
+<tbody>
+<% for (const { requestId, pin } of recentPinRequests) { -%>
+<tr><td><%= helper.toHex(requestId) %></td><td><%= pin %></td></tr>
+<% } -%>
+</tbody>
+</table>
+<% } -%>
+
 </div>
 </main>
 
