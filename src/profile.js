@@ -1,5 +1,4 @@
 import { CaProfile } from "@ndn/ndncert";
-import { Data } from "@ndn/packet";
 import { Encoder } from "@ndn/tlv";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
@@ -16,7 +15,7 @@ export async function download(req, res) {
     return;
   }
   res.contentType("application/octet-stream");
-  res.write(Data.getWire(profile.data));
+  res.write(Encoder.encode(profile.data));
   res.end();
 }
 

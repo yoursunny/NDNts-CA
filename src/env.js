@@ -49,7 +49,8 @@ export async function modifyEnv(changes) {
 
 export const keyChain = openKeyChain();
 
-export const repo = new DataStore(leveldown(env.repo));
+/** @type DataStore|undefined */
+export let repo; // eslint-disable-line import/no-mutable-exports
 
 /** @type RepoProducer */
 let repoProducer;
@@ -63,12 +64,21 @@ let server;
 /** @type import("@ndn/endpoint").Producer[]|undefined */
 let certProducers;
 
+async function publishCerts() {
+  const endpoint = new Endpoint({ announcement: false });
+  certProducers = [];
+  for (let cert = profile.cert; !cert.certName.subjectName.isPrefixOf(cert.data.sigInfo.keyLocator);) {
+    const { data } = cert;
+    certProducers.push(endpoint.produce(cert.name.getPrefix(-2), async () => data));
+    try {
+      const data = await endpoint.consume(new Interest(cert.data.sigInfo.keyLocator, Interest.CanBePrefix));
+      cert = new Certificate(data);
+    } catch { break; }
+  }
+}
+
 export async function initialize() {
   await openUplinks();
-
-  repoProducer = RepoProducer.create(repo, {
-    reg: RepoProducer.PrefixRegShorter(2),
-  });
 
   /** @type import("@ndn/keychain").PrivateKey|undefined */
   let key;
@@ -83,6 +93,13 @@ export async function initialize() {
     return;
   }
 
+  publishCerts().catch(() => undefined);
+
+  repo = new DataStore(leveldown(env.repo));
+  repoProducer = RepoProducer.create(repo, {
+    reg: RepoProducer.PrefixRegShorter(2),
+  });
+
   server = Server.create({
     repo,
     profile,
@@ -90,17 +107,6 @@ export async function initialize() {
     challenges: [new ServerNopChallenge()],
     issuerId: "NDNts-Personal-CA",
   });
-
-  const endpoint = new Endpoint({ announcement: false });
-  certProducers = [];
-  for (let cert = profile.cert; !cert.certName.subjectName.isPrefixOf(cert.data.sigInfo.keyLocator);) {
-    const { data } = cert;
-    certProducers.push(endpoint.produce(cert.name.getPrefix(-2), async () => data));
-    try {
-      const data = await endpoint.consume(new Interest(cert.data.sigInfo.keyLocator, Interest.CanBePrefix));
-      cert = new Certificate(data);
-    } catch { break; }
-  }
 }
 
 function cleanup() {
