@@ -6,14 +6,14 @@ import { keyChain, repo } from "./env.js";
 import { certFromBase64, handleError, nameFromHex, template } from "./helper.js";
 
 /** @type {import("express").Handler} */
-export async function requestForm(req, res) {
+async function requestForm(req, res) {
   template("manual-request", {
     certNames: await keyChain.listCerts(),
   })(req, res);
 }
 
 /** @type {import("express").Handler} */
-export async function requestSubmit(req, res) {
+async function requestSubmit(req, res) {
   const certreq = certFromBase64(req.body.certreq);
   const publicKey = await Certificate.loadPublicKey(certreq);
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
@@ -31,7 +31,7 @@ export async function requestSubmit(req, res) {
 }
 
 /** @type {import("express").Handler} */
-export async function viewIssued(req, res) {
+async function viewIssued(req, res) {
   const name = nameFromHex(req.query.name);
   const data = await repo.get(name);
   const cert = new Certificate(data);

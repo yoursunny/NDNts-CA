@@ -25,7 +25,8 @@
     "graceful-fs": "^4.2.4",
     "hard-rejection": "^2.1.0",
     "leveldown": "^5.6.0",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "numd": "^3.1.0"
   },
   "devDependencies": {
     "eslint-plugin-simple-import-sort": "^5.0.3",

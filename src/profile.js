@@ -8,7 +8,7 @@ import { require } from "./require.js";
 const { promises: fs } = require("graceful-fs");
 
 /** @type {import("express").Handler} */
-export async function download(req, res) {
+async function download(req, res) {
   if (!profile) {
     res.status(404);
     res.end();
@@ -20,7 +20,7 @@ export async function download(req, res) {
 }
 
 /** @type {import("express").Handler} */
-export async function show(req, res) {
+async function show(req, res) {
   if (!profile) {
     res.status(404);
     res.end();

@@ -10,7 +10,7 @@ const got = require("got");
 import { keyChain } from "./env.js";
 import { certFromBase64, handleError, message, nameFromHex, template } from "./helper.js";
 
-const KEYCHAIN_LIST_URI = "keychain-list.html";
+const nextList = { next: "keychain-list.html" };
 
 /** @type {import("express").Handler} */
 async function list(req, res) {
@@ -24,16 +24,14 @@ async function list(req, res) {
 async function deleteKey(req, res) {
   const name = nameFromHex(req.body.name);
   await keyChain.deleteKey(name);
-  message(`Key ${AltUri.ofName(name)} deleted.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Key ${AltUri.ofName(name)} deleted.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
 async function deleteCert(req, res) {
   const name = nameFromHex(req.body.name);
   await keyChain.deleteCert(name);
-  message(`Certificate ${AltUri.ofName(name)} deleted.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Certificate ${AltUri.ofName(name)} deleted.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -42,8 +40,7 @@ async function selfSign(req, res) {
   const [privateKey, publicKey] = await keyChain.getKeyPair(name);
   const cert = await Certificate.selfSign({ privateKey, publicKey });
   await keyChain.insertCert(cert);
-  message(`Self-signed certificate ${AltUri.ofName(cert.name)} created.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Self-signed certificate ${AltUri.ofName(cert.name)} created.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -52,8 +49,7 @@ async function genKey(req, res) {
   /** @type {import("@ndn/keychain").EcCurve} */
   const curve = req.body.curve;
   const [privateKey] = await EcPrivateKey.generate(name, curve, keyChain);
-  message(`Key ${AltUri.ofName(privateKey.name)} generated.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Key ${AltUri.ofName(privateKey.name)} generated.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -75,8 +71,7 @@ async function reqForm(req, res) {
 async function insertCert(req, res) {
   const cert = certFromBase64(req.body.cert);
   await keyChain.insertCert(cert);
-  message(`Certificate ${AltUri.ofName(cert.name)} installed.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Certificate ${AltUri.ofName(cert.name)} installed.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -89,16 +84,14 @@ async function downloadNdncertLegacy(req, res) {
   const response = await got(m[1]);
   const cert = certFromBase64(response.body);
   await keyChain.insertCert(cert);
-  message(`Certificate ${AltUri.ofName(cert.name)} installed.`,
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message(`Certificate ${AltUri.ofName(cert.name)} installed.`, nextList)(req, res);
 }
 
 /** @type {import("express").Handler} */
 async function importNdnsec(req, res) {
   const ndnsecKeychain = new NdnsecKeyChain();
   await ndnsecKeychain.copyTo(keyChain);
-  message("Keys and certificates have been imported.",
-    { next: KEYCHAIN_LIST_URI })(req, res);
+  message("Keys and certificates have been imported.", nextList)(req, res);
 }
 
 /** @param {import("express").Express} app */

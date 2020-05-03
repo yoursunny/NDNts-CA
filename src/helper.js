@@ -2,6 +2,7 @@ import { Certificate } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
+import numd from "numd";
 
 import { require } from "./require.js";
 /** @type {import("fast-chunk-string")} */
@@ -10,6 +11,8 @@ const fastChunkString = require("fast-chunk-string");
 /** @param {import("express").Express} app */
 export function registerViewHelpers(app) {
   app.locals.helper = {
+    numd,
+
     /**
      * @param {import("@ndn/packet".Name)} name
      * @returns {string}

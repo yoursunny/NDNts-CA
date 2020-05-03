@@ -1,0 +1,33 @@
+<%- include("_header") %>
+
+<main class="pure-g">
+<div class="pure-u-1">
+
+<h1>Published Certificates</h1>
+
+<form action="certs-act.cgi" method="post" class="pure-form">
+
+<table class="pure-table pure-table-horizontal">
+<thead>
+<tr><th>&nbsp;</th><th>name</th><th>validity</th></tr>
+</thead>
+<tbody>
+<% for (const cert of certs) { -%>
+<tr>
+  <td><input type="checkbox" name="name" value="<%= helper.nameHex(cert.name) %>"></td>
+  <td><%= helper.altUri(cert.name) %></td>
+  <td><%= cert.validity %></td>
+</tr>
+<% } -%>
+</tbody>
+</table>
+
+<fieldset>
+<button class="pure-button" type="submit" name="act" value="delete">delete selected</button>
+</fieldset>
+</form>
+
+</div>
+</main>
+
+<%- include("_footer") %>

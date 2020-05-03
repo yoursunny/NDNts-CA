@@ -1,5 +1,6 @@
 import express from "express";
 
+import { register as certsRoutes } from "./certs.js";
 import { env, initialize, profile, recentPinRequests } from "./env.js";
 import { message, registerViewHelpers, template } from "./helper.js";
 import { register as keychainRoutes } from "./keychain.js";
@@ -20,6 +21,7 @@ app.get("/", template("frontpage", { challenges: env.challenges, recentPinReques
 profileRoutes(app);
 keychainRoutes(app);
 manualRoutes(app);
+certsRoutes(app);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
