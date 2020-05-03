@@ -17,7 +17,6 @@
     "@ndn/repo": "https://ndnts-nightly.netlify.app/repo.tgz",
     "@ndn/tlv": "https://ndnts-nightly.netlify.app/tlv.tgz",
     "@strattadb/environment": "https://gist.github.com/yoursunny/d49e376b43a01ed1a2c085831d5cd407/raw/a8c7588e0ea1771323ff40a5bab0a9fa833fa7a0/strattadb-environment-8.0.0.tgz",
-    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.2",
     "envfile": "^5.0.0",

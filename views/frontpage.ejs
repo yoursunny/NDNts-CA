@@ -6,7 +6,7 @@
 <h1>NDNts Personal CA</h1>
 
 <% if (profile) { -%>
-<p>Certificate Authority running at <kbd><%= helper.altUri(profile.prefix) %></kbd>.</p>
+<p>Certificate Authority running at <kbd><%= helper.altUri(profile.prefix) %></kbd> with <%= challenges.join(", ") + (challenges.length > 1 ? " challenges" : " challenge") %>.</p>
 <p><a href="profile.data">Download</a> or <a href="profile.txt">view</a> CA profile.</p>
 <% } else { -%>
 <p>Certificate Authority inactive.</p>

@@ -4,10 +4,10 @@
 <div class="pure-u-1">
 
 <h1>Submit Certificate Request</h1>
-<p>
-This CA runs NDNCERT 0.3 server and you may use any NDNCERT 0.3 client to request a certificate from this CA.
-Alternatively, you can paste a certificate request here and manually issue a certificate.
-</p>
+<% if (profile) { -%>
+<p>This CA runs NDNCERT 0.3 server and you may use any NDNCERT 0.3 client to request a certificate from this CA.</p>
+<% } -%>
+<p>You may paste a certificate request here and manually issue a certificate, without using NDNCERT client.</p>
 
 <form action="manual-submit.cgi" method="post" class="pure-form pure-form-stacked">
 <fieldset>

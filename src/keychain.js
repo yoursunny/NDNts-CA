@@ -84,9 +84,7 @@ async function downloadNdncertLegacy(req, res) {
   const email = String(req.body.email);
   const m = email.match(/(https:\/\/ndncert\.named-data\.net\/cert\/get\/[^"]+)"?/);
   if (!m) {
-    message("Certificate name not found in email.",
-      { next: "back" })(req, res);
-    return;
+    throw new Error("Certificate name not found in email.");
   }
   const response = await got(m[1]);
   const cert = certFromBase64(response.body);
