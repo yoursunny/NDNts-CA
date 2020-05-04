@@ -68,7 +68,7 @@ async function newSubmit(req, res) {
     NDNTS_KEY: keyName,
     NDNTS_NFDREGKEY: keyName,
     CA_KEY: keyName,
-    CA_CHALLENGES: challenges,
+    CA_CHALLENGES: challenges.join(),
   });
 }
 

@@ -15,7 +15,7 @@ async function requestForm(req, res) {
 /** @type {import("express").Handler} */
 async function requestSubmit(req, res) {
   const certreq = certFromBase64(req.body.certreq);
-  const publicKey = await Certificate.loadPublicKey(certreq);
+  const publicKey = await certreq.loadPublicKey();
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
   const issuerPrivateKey = await keyChain.getPrivateKey(issuer.certName.key);
   const validDays = Number.parseInt(req.body.validdays, 10);
@@ -32,7 +32,7 @@ async function requestSubmit(req, res) {
 
 /** @type {import("express").Handler} */
 async function viewIssued(req, res) {
-  const name = nameFromHex(req.query.name);
+  const name = nameFromHex(String(req.query.name));
   const cert = Certificate.fromData(await repo.get(name));
   template("manual-issued", { cert })(req, res);
 }

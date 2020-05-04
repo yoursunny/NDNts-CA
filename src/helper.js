@@ -14,7 +14,7 @@ export function registerViewHelpers(app) {
     numd,
 
     /**
-     * @param {import("@ndn/packet".Name)} name
+     * @param {import("@ndn/packet").Name} name
      * @returns {string}
      */
     altUri(name) {
@@ -24,7 +24,7 @@ export function registerViewHelpers(app) {
     toHex,
 
     /**
-     * @param {import("@ndn/packet".Name)} name
+     * @param {import("@ndn/packet").Name} name
      * @returns {string}
      */
     nameHex(name) {
@@ -32,7 +32,7 @@ export function registerViewHelpers(app) {
     },
 
     /**
-     * @param {Certificate)} cert
+     * @param {Certificate} cert
      * @returns {string}
      */
     certBase64(cert) {
@@ -80,8 +80,8 @@ export function handleError(asyncHandler) {
 /**
  * Render a template.
  * @param {string} view
- * @param {object} options
- * @returns {import("express").Handler}
+ * @param {object} [options]
+ * @returns {(req: import("express").Request, res: import("express").Response) => void}
  */
 export function template(view, options) {
   return (req, res) => {
@@ -98,9 +98,9 @@ const MESSAGE_NEXT = {
  * Display message and optionally redirect back to frontpage.
  * @param {string} message
  * @param {object} opts
- * @param {string} opts.title
- * @param {"home"|"back"|string} opts.next
- * @returns {import("express").Handler}
+ * @param {string} [opts.title]
+ * @param {"home"|"back"|string} [opts.next]
+ * @returns {(req: import("express").Request, res: import("express").Response) => void}
  */
 export function message(message, opts = {}) {
   const {

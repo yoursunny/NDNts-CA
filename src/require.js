@@ -1,2 +1,2 @@
-import { createRequire } from "module";
-export const require = createRequire(import.meta.url);
+import module from "module";
+export const require = module.createRequire(import.meta.url);

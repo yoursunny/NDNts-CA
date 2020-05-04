@@ -54,8 +54,8 @@ async function genKey(req, res) {
 
 /** @type {import("express").Handler} */
 async function reqForm(req, res) {
-  const name = nameFromHex(req.query.name);
-  let days = Number.parseInt(req.query.days, 10);
+  const name = nameFromHex(String(req.query.name));
+  let days = Number.parseInt(String(req.query.days), 10);
   if (!days) {
     days = 30;
   }

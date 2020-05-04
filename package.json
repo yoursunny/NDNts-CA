@@ -3,7 +3,8 @@
   "main": "server.js",
   "scripts": {
     "lint": "xo --fix",
-    "start": "nodemon -x \"node --experimental-modules\" -w .env -w src server.js"
+    "start": "nodemon -x \"node --experimental-modules\" -w .env -w src server.js",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@ndn/cli-common": "https://ndnts-nightly.netlify.app/cli-common.tgz",
@@ -29,7 +30,10 @@
     "numd": "^3.1.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/node": "12.*",
     "eslint-plugin-simple-import-sort": "^5.0.3",
+    "typescript": "^3.8.3",
     "xo": "^0.30.0"
   }
 }

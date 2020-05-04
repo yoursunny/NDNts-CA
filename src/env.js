@@ -4,7 +4,7 @@ import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
 import { Endpoint } from "@ndn/endpoint";
 import { Certificate } from "@ndn/keychain";
 import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
-import { Data, Interest } from "@ndn/packet";
+import { Data, Interest, Name } from "@ndn/packet";
 import { DataStore, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
 import dotenv from "dotenv";
@@ -105,14 +105,15 @@ export async function initialize() {
 }
 
 async function publishCerts() {
+  const testbedRootKeyPrefix = new Name("/ndn/KEY");
   const endpoint = new Endpoint({ announcement: false });
   certProducers = [];
-  for (let cert = profile.cert; !cert.certName.subjectName.isPrefixOf(cert.data.sigInfo.keyLocator);) {
+  for (let cert = profile.cert; cert.issuer && !testbedRootKeyPrefix.isPrefixOf(cert.issuer);) {
     const { data } = cert;
     certProducers.push(endpoint.produce(cert.name.getPrefix(-2), async () => data));
     try {
       cert = Certificate.fromData(await endpoint.consume(
-        new Interest(cert.data.sigInfo.keyLocator, Interest.CanBePrefix)));
+        new Interest(cert.issuer, Interest.CanBePrefix)));
     } catch { break; }
   }
 }
