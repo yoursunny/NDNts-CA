@@ -47,7 +47,7 @@ async function newSubmit(req, res) {
   }
 
   const cert = await keyChain.getCert(nameFromHex(req.body.cert));
-  const signer = await keyChain.getPrivateKey(cert.certName.toKeyName().toName());
+  const signer = await keyChain.getPrivateKey(cert.certName.key);
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);
   const profile = await CaProfile.build({

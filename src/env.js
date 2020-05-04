@@ -79,7 +79,7 @@ export async function initialize() {
   try {
     const profileData = new Decoder(await fs.readFile(env.profile)).decode(Data);
     profile = await CaProfile.fromData(profileData);
-    key = await keyChain.getPrivateKey(profile.cert.certName.toKeyName().toName());
+    key = await keyChain.getPrivateKey(profile.cert.certName.key);
   } catch {
     try {
       await fs.unlink(env.profile);
@@ -111,8 +111,8 @@ async function publishCerts() {
     const { data } = cert;
     certProducers.push(endpoint.produce(cert.name.getPrefix(-2), async () => data));
     try {
-      const data = await endpoint.consume(new Interest(cert.data.sigInfo.keyLocator, Interest.CanBePrefix));
-      cert = new Certificate(data);
+      cert = Certificate.fromData(await endpoint.consume(
+        new Interest(cert.data.sigInfo.keyLocator, Interest.CanBePrefix)));
     } catch { break; }
   }
 }

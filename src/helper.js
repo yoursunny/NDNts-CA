@@ -59,8 +59,7 @@ export function nameFromHex(input) {
 export function certFromBase64(input) {
   try {
     const buffer = Buffer.from(input, "base64");
-    const data = new Decoder(buffer).decode(Data);
-    return new Certificate(data);
+    return Certificate.fromData(new Decoder(buffer).decode(Data));
   } catch {
     throw new Error("invalid certificate");
   }

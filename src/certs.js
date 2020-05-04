@@ -11,8 +11,7 @@ async function list(req, res) {
   /** @type {Certificate[]} */
   const certs = [];
   for await (const data of repo.list()) {
-    const cert = new Certificate(data);
-    certs.push(cert);
+    certs.push(Certificate.fromData(data));
   }
   template("certs-list", { certs })(req, res);
 }

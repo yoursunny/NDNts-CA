@@ -17,7 +17,7 @@ async function requestSubmit(req, res) {
   const certreq = certFromBase64(req.body.certreq);
   const publicKey = await Certificate.loadPublicKey(certreq);
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
-  const issuerPrivateKey = await keyChain.getPrivateKey(issuer.certName.toKeyName().toName());
+  const issuerPrivateKey = await keyChain.getPrivateKey(issuer.certName.key);
   const validDays = Number.parseInt(req.body.validdays, 10);
   const cert = await Certificate.issue({
     issuerPrivateKey,
@@ -33,8 +33,7 @@ async function requestSubmit(req, res) {
 /** @type {import("express").Handler} */
 async function viewIssued(req, res) {
   const name = nameFromHex(req.query.name);
-  const data = await repo.get(name);
-  const cert = new Certificate(data);
+  const cert = Certificate.fromData(await repo.get(name));
   template("manual-issued", { cert })(req, res);
 }
 
