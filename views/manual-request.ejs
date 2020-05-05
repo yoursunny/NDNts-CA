@@ -1,7 +1,7 @@
 <%- include("_header") %>
 
-<main class="pure-g">
-<div class="pure-u-1">
+<div class="pure-g">
+<main class="pure-u-1">
 
 <h1>Submit Certificate Request</h1>
 <% if (profile) { -%>
@@ -34,7 +34,7 @@
 <pre>ndnsec key-gen -te <%= profile ? profile.cert.certName.subjectName : "/localhost" %>/$(hostname -s)</pre>
 <p>Then, paste the output in the form above.</p>
 
-</div>
 </main>
+</div>
 
 <%- include("_footer") %>

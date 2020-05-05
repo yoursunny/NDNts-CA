@@ -46,7 +46,7 @@ module.exports = {
   ignores: [
     "src/require.js",
   ],
-  envs: ["browser", "es2020"],
+  envs: ["es2020"],
   space: 2,
   plugins: [
     "simple-import-sort",
