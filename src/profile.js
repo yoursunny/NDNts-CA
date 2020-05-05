@@ -10,25 +10,16 @@ const { promises: fs } = require("graceful-fs");
 /** @type {import("express").Handler} */
 async function download(req, res) {
   if (!profile) {
-    res.status(404);
-    res.end();
+    res.status(404).end();
     return;
   }
   res.contentType("application/octet-stream");
-  res.write(Buffer.from(Encoder.encode(profile.data)));
-  res.end();
+  res.send(Buffer.from(Encoder.encode(profile.data)));
 }
 
 /** @type {import("express").Handler} */
-async function show(req, res) {
-  if (!profile) {
-    res.status(404);
-    res.end();
-    return;
-  }
-  res.contentType("text/plain");
-  res.write(`${profile}`);
-  res.end();
+async function view(req, res) {
+  return template("profile-view")(req, res);
 }
 
 /** @type {import("express").Handler} */
@@ -74,8 +65,8 @@ async function newSubmit(req, res) {
 
 /** @param {import("express").Express} app */
 export function register(app) {
+  app.get("/profile.html", handleError(view));
   app.get("/profile.data", handleError(download));
-  app.get("/profile.txt", handleError(show));
 
   app.get("/profile-new.html", handleError(newForm));
   app.post("/profile-new.cgi", handleError(newSubmit));

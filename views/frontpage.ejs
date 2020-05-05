@@ -7,7 +7,7 @@
 
 <% if (profile) { -%>
 <p>Certificate Authority running at <kbd><%= helper.altUri(profile.prefix) %></kbd> with enabled challenges: <%= challenges.join(", ") %>.</p>
-<p><a href="profile.data">Download</a> or <a href="profile.txt">view</a> CA profile.</p>
+<p><a href="profile.html">View</a> or <a href="profile.data">download</a> CA profile.</p>
 <% } else { -%>
 <p>Certificate Authority inactive.</p>
 <% } -%>
