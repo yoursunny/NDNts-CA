@@ -39,7 +39,8 @@ export const env = makeEnv({
   challenges: {
     envVarName: "CA_CHALLENGES",
     parser: parsers.array({ parser: parsers.string }),
-    required: true,
+    required: false,
+    defaultValue: [],
   },
 });
 
