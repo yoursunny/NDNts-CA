@@ -60,7 +60,7 @@ export const keyChain = openKeyChain();
 /** @type {DataStore|undefined} */
 export let repo;
 
-/** @type {RepoProducer} */
+/** @type {RepoProducer|undefined} */
 let repoProducer;
 
 /** @type {CaProfile|undefined} */
@@ -151,8 +151,12 @@ function cleanup() {
   if (server) {
     server.close();
   }
-  repoProducer.close();
-  repo.close();
+  if (repoProducer) {
+    repoProducer.close();
+  }
+  if (repo) {
+    repo.close();
+  }
   closeUplinks();
 }
 
