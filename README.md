@@ -33,6 +33,17 @@ You can then obtain sub-certificates from this Personal CA using one of these me
 * use a NDNCERT v0.3 client
 * use "submit a certificate request" page
 
+### Try on Glitch
+
+You can try NDNts Personal CA on [Glitch](https://glitch.com), without local installation.
+
+1. [Import the Project](https://glitch.com/#!/import/github/yoursunny/NDNts-CA/)
+2. Select *Tools - Terminal*. In the terminal, execute `bash glitch-init.sh`.
+3. Wait about 1 minute for dependency installation. You may watch the progress in *Tools - Logs*. `http://localhost:3000` indicates the application is ready.
+4. Select *Show - in a new window* to open the application.
+
+Note that Glitch is unsuitable for long-term installation, because anyone who knows your Glitch application name will be access your CA, and the NDNCERT server is available only if you are accessing the Glitch application from the web.
+
 ## Technical Information
 
 ![NDNts logo](public/logo.svg)
