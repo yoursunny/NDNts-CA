@@ -5,7 +5,7 @@ import { Endpoint } from "@ndn/endpoint";
 import { Certificate } from "@ndn/keychain";
 import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data, Interest, Name } from "@ndn/packet";
-import { DataStore, RepoProducer } from "@ndn/repo";
+import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
 import dotenv from "dotenv";
 import leveldown from "leveldown";
@@ -50,9 +50,9 @@ export const env = makeEnv({
  */
 export async function modifyEnv(changes) {
   /** @type {Record<string, string>} */
-  const fenv = envfile.parseSync(await fs.readFile(".env", { encoding: "utf-8" }));
+  const fenv = envfile.parse(await fs.readFile(".env", { encoding: "utf-8" }));
   Object.assign(fenv, changes);
-  await fs.writeFile(".env", envfile.stringifySync(fenv));
+  await fs.writeFile(".env", envfile.stringify(fenv));
 }
 
 export const keyChain = openKeyChain();
@@ -92,7 +92,7 @@ export async function initialize() {
 
   repo = new DataStore(leveldown(env.repo));
   repoProducer = RepoProducer.create(repo, {
-    reg: RepoProducer.PrefixRegShorter(2),
+    reg: PrefixRegShorter(2),
   });
 
   server = Server.create({

@@ -10,7 +10,7 @@ const nextList = { next: "certs-list.html" };
 async function list(req, res) {
   /** @type {Certificate[]} */
   const certs = [];
-  for await (const data of repo.list()) {
+  for await (const data of repo.listData()) {
     certs.push(Certificate.fromData(data));
   }
   template("certs-list", { certs })(req, res);
