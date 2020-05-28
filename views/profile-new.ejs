@@ -14,6 +14,9 @@
 <option value="<%= helper.nameHex(certName) %>"><%= helper.altUri(certName) %></option>
 <% } -%>
 </select>
+<% if (certNames.length === 0) { -%>
+<span class="pure-form-message">No certificate available. Go to <a href="keychain-list.html">keychain management</a>.</span>
+<% } -%>
 
 <label for="f_info">description</label>
 <textarea id="f_info" name="info" rows="5" cols="80"></textarea>

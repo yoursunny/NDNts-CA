@@ -57,8 +57,7 @@ export async function modifyEnv(changes) {
 
 export const keyChain = openKeyChain();
 
-/** @type {DataStore|undefined} */
-export let repo;
+export const repo = new DataStore(leveldown(env.repo));
 
 /** @type {RepoProducer|undefined} */
 let repoProducer;
@@ -90,7 +89,6 @@ export async function initialize() {
 
   publishCerts().catch(() => undefined);
 
-  repo = new DataStore(leveldown(env.repo));
   repoProducer = RepoProducer.create(repo, {
     reg: PrefixRegShorter(2),
   });
@@ -154,9 +152,7 @@ function cleanup() {
   if (repoProducer) {
     repoProducer.close();
   }
-  if (repo) {
-    repo.close();
-  }
+  repo.close();
   closeUplinks();
 }
 
