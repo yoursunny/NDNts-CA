@@ -1,4 +1,4 @@
-import { Certificate } from "@ndn/keychain";
+import { Certificate, CertNaming } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
@@ -12,6 +12,8 @@ const fastChunkString = require("fast-chunk-string");
 /** @param {import("express").Express} app */
 export function registerViewHelpers(app) {
   app.locals.helper = {
+    CertNaming,
+
     numd,
 
     /**

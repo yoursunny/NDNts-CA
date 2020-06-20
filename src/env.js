@@ -6,7 +6,7 @@ import { Certificate, CertNaming } from "@ndn/keychain";
 import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data, Interest, Name } from "@ndn/packet";
 import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
-import { Decoder } from "@ndn/tlv";
+import { Decoder, toHex } from "@ndn/tlv";
 import dotenv from "dotenv";
 import leveldown from "leveldown";
 import module from "module";
@@ -69,8 +69,8 @@ export let profile;
 /** @type {Server|undefined} */
 let server;
 
-/** @type {import("@ndn/endpoint").Producer[]|undefined} */
-let certProducers;
+/** @type {Map<string, import("@ndn/endpoint").Producer>} */
+const certProducers = new Map();
 
 export async function initialize() {
   await openUplinks();
@@ -107,10 +107,14 @@ export async function initialize() {
 async function publishCerts() {
   const testbedRootKeyPrefix = new Name("/ndn/KEY");
   const endpoint = new Endpoint({ announcement: false });
-  certProducers = [];
   for (let cert = profile.cert; cert.issuer && !testbedRootKeyPrefix.isPrefixOf(cert.issuer);) {
     const { data } = cert;
-    certProducers.push(endpoint.produce(cert.name.getPrefix(-2), async () => data));
+    const producerName = cert.name.getPrefix(-2);
+    const producerNameHex = toHex(producerName.value);
+    if (certProducers.has(producerNameHex)) {
+      break;
+    }
+    certProducers.set(producerNameHex, endpoint.produce(producerName, async () => data));
     try {
       cert = Certificate.fromData(await endpoint.consume(
         new Interest(cert.issuer, Interest.CanBePrefix)));
@@ -144,8 +148,8 @@ function makeChallenge(id) {
 }
 
 function cleanup() {
-  if (certProducers) {
-    certProducers.map((p) => p.close());
+  for (const p of certProducers.values()) {
+    p.close();
   }
   if (server) {
     server.close();

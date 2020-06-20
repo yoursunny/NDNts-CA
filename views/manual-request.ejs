@@ -31,7 +31,7 @@
 
 <h2>Generate request with ndnsec</h2>
 <p>If you want to create a certificate for use in ndn-cxx, generate a certificate request with this command:</p>
-<pre>ndnsec key-gen -te <%= profile ? profile.cert.certName.subjectName : "/localhost" %>/$(hostname -s)</pre>
+<pre>ndnsec key-gen -te <%= profile ? helper.CertNaming.toSubjectName(profile.cert.name) : "/localhost" %>/$(hostname -s)</pre>
 <p>Then, paste the output in the form above.</p>
 
 </main>
