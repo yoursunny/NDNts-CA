@@ -1,2 +1,2 @@
 require("hard-rejection")();
-import("./src/main.js"); // eslint-disable-line no-unused-expressions
+import("./src/main.js");

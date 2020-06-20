@@ -1,9 +1,12 @@
+import { CertNaming } from "@ndn/keychain";
 import { CaProfile } from "@ndn/ndncert";
 import { Encoder } from "@ndn/tlv";
+import module from "module";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
 import { handleError, message, nameFromHex, template } from "./helper.js";
-import { require } from "./require.js";
+
+export const require = module.createRequire(import.meta.url);
 /** @type {import("graceful-fs")} */
 const { promises: fs } = require("graceful-fs");
 
@@ -38,11 +41,11 @@ async function newSubmit(req, res) {
   }
 
   const cert = await keyChain.getCert(nameFromHex(req.body.cert));
-  const signer = await keyChain.getPrivateKey(cert.certName.key);
+  const signer = await keyChain.getPrivateKey(CertNaming.toKeyName(cert.name));
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);
   const profile = await CaProfile.build({
-    prefix: cert.certName.subjectName.append("CA"),
+    prefix: CertNaming.toSubjectName(cert.name).append("CA"),
     info,
     probeKeys: [],
     maxValidityPeriod,

@@ -2,9 +2,10 @@ import { Certificate } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
+import module from "module";
 import numd from "numd";
 
-import { require } from "./require.js";
+export const require = module.createRequire(import.meta.url);
 /** @type {import("fast-chunk-string")} */
 const fastChunkString = require("fast-chunk-string");
 

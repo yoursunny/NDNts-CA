@@ -43,9 +43,6 @@ const rules = {
 };
 
 module.exports = {
-  ignores: [
-    "src/require.js",
-  ],
   envs: ["es2020"],
   space: 2,
   plugins: [
@@ -55,12 +52,4 @@ module.exports = {
     "xo/esnext",
   ],
   rules,
-  overrides: [
-    {
-      files: ["webpack.config.js"],
-      rules: {
-        "import/no-extraneous-dependencies": "off",
-      },
-    },
-  ],
 };

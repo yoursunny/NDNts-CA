@@ -1,4 +1,4 @@
-import { Certificate, ValidityPeriod } from "@ndn/keychain";
+import { Certificate, CertNaming, ValidityPeriod } from "@ndn/keychain";
 import { Component } from "@ndn/packet";
 import { toHex } from "@ndn/tlv";
 
@@ -17,7 +17,7 @@ async function requestSubmit(req, res) {
   const certreq = certFromBase64(req.body.certreq);
   const publicKey = await certreq.loadPublicKey();
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
-  const issuerPrivateKey = await keyChain.getPrivateKey(issuer.certName.key);
+  const issuerPrivateKey = await keyChain.getPrivateKey(CertNaming.toKeyName(issuer.name));
   const validDays = Number.parseInt(req.body.validdays, 10);
   const cert = await Certificate.issue({
     issuerPrivateKey,

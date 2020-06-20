@@ -2,15 +2,16 @@
 
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
 import { Endpoint } from "@ndn/endpoint";
-import { Certificate } from "@ndn/keychain";
+import { Certificate, CertNaming } from "@ndn/keychain";
 import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data, Interest, Name } from "@ndn/packet";
 import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
 import dotenv from "dotenv";
 import leveldown from "leveldown";
+import module from "module";
 
-import { require } from "./require.js";
+export const require = module.createRequire(import.meta.url);
 /** @type {import("@strattadb/environment")} */
 const { makeEnv, parsers } = require("@strattadb/environment");
 /** @type {import("envfile")} */
@@ -79,7 +80,7 @@ export async function initialize() {
   try {
     const profileData = new Decoder(await fs.readFile(env.profile)).decode(Data);
     profile = await CaProfile.fromData(profileData);
-    key = await keyChain.getPrivateKey(profile.cert.certName.key);
+    key = await keyChain.getPrivateKey(CertNaming.toKeyName(profile.cert.name));
   } catch {
     try {
       await fs.unlink(env.profile);

@@ -2,6 +2,7 @@
   "private": true,
   "main": "server.js",
   "scripts": {
+    "pnpm-install": "pnpm install --shamefully-hoist",
     "lint": "xo --fix",
     "start": "nodemon -w .env -w src server.js",
     "typecheck": "tsc"
@@ -17,10 +18,10 @@
     "@ndn/packet": "https://ndnts-nightly.ndn.today/packet.tgz",
     "@ndn/repo": "https://ndnts-nightly.ndn.today/repo.tgz",
     "@ndn/tlv": "https://ndnts-nightly.ndn.today/tlv.tgz",
-    "@strattadb/environment": "https://gist.github.com/yoursunny/d49e376b43a01ed1a2c085831d5cd407/raw/a8c7588e0ea1771323ff40a5bab0a9fa833fa7a0/strattadb-environment-8.0.0.tgz",
+    "@strattadb/environment": "^8.0.1",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.3",
-    "envfile": "^6.2.0",
+    "envfile": "^6.5.0",
     "express": "^4.17.1",
     "fast-chunk-string": "^1.0.1",
     "got": "^11.1.4",
@@ -32,9 +33,9 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.6",
-    "@types/node": "^14.0.5",
+    "@types/node": "^14.0.13",
     "eslint-plugin-simple-import-sort": "^5.0.3",
-    "typescript": "^3.9.3",
-    "xo": "^0.30.0"
+    "typescript": "^3.9.5",
+    "xo": "^0.32.0"
   }
 }

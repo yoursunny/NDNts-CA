@@ -42,7 +42,7 @@ You can try NDNts Personal CA on [Glitch](https://glitch.com), without local ins
 3. Wait about 1 minute for dependency installation. You may watch the progress in *Tools - Logs*. `http://localhost:3000` indicates the application is ready.
 4. Select *Show - in a new window* to open the application.
 
-Note that Glitch is unsuitable for long-term installation, because anyone who knows your Glitch application name will be access your CA, and the NDNCERT server is available only if you are accessing the Glitch application from the web.
+Note that Glitch is unsuitable for long-term installation, because anyone who knows your Glitch application name will be able to access your CA, and the NDNCERT server is available only if you are accessing the Glitch application from the web.
 
 ## Technical Information
 
