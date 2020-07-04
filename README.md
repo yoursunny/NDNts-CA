@@ -17,8 +17,9 @@ Setup steps:
 
 1. Clone the repository.
 2. Execute `npm install`, or `npm run pnpm-install` if you have PNPM.
-3. Run `npm start`, or `pm2 start ecosystem.config.js` for production deployment.
+3. Run `npm start`, or `pm2 start ecosystem.config.js` for production deployment with PM2.
 4. Visit `http://localhost:8722/` in a web browser.
+5. If using PM2, you have to manually restart the service with `pm2 restart ecosystem.config.js` after changing CA profile.
 
 To obtain an NDN testbed certificate and start issuing sub-certificates:
 
