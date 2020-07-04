@@ -4,6 +4,7 @@
   "scripts": {
     "pnpm-install": "pnpm install --shamefully-hoist",
     "lint": "xo --fix",
+    "postinstall": "node postinstall.js",
     "start": "nodemon -w .env -w src server.js",
     "typecheck": "tsc"
   },

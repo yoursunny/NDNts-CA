@@ -16,9 +16,9 @@ System requirements:
 Setup steps:
 
 1. Clone the repository.
-2. Copy `sample.env` to `.env`.
-3. Run `npm start`.
-4. Visit http://localhost:8722/ in a web browser.
+2. Execute `npm install`, or `npm run pnpm-install` if you have PNPM.
+3. Run `npm start`, or `pm2 start ecosystem.config.js` for production deployment.
+4. Visit `http://localhost:8722/` in a web browser.
 
 To obtain an NDN testbed certificate and start issuing sub-certificates:
 
