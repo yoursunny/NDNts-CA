@@ -6,6 +6,8 @@ module.exports = {
       env: {
         NODE_ENV: "production",
       },
+      // eslint-disable-next-line camelcase
+      cron_restart: "24 16 * * *",
     },
   ],
 };

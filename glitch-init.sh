@@ -1,7 +1,7 @@
 pkill -f npm
 echo npm > .config/glitch-package-manager
 find node_modules/ -delete || true
-jq '.dependencies.node="^14.3.0"' <package.json >package-new.json
+jq '.dependencies.node="^14.4.0"' <package.json >package-new.json
 mv package-new.json package.json
 npm install -P
 rm -f .env
