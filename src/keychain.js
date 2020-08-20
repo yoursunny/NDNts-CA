@@ -1,4 +1,4 @@
-import { Certificate, CertNaming, EcPrivateKey, ValidityPeriod } from "@ndn/keychain";
+import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Name } from "@ndn/packet";
@@ -38,8 +38,8 @@ async function deleteCert(req, res) {
 /** @type {import("express").Handler} */
 async function selfSign(req, res) {
   const name = nameFromHex(req.body.name);
-  const [privateKey, publicKey] = await keyChain.getKeyPair(name);
-  const cert = await Certificate.selfSign({ privateKey, publicKey });
+  const { signer, publicKey } = await keyChain.getKeyPair(name);
+  const cert = await Certificate.selfSign({ privateKey: signer, publicKey });
   await keyChain.insertCert(cert);
   message(`Self-signed certificate ${AltUri.ofName(cert.name)} created.`, nextList)(req, res);
 }
@@ -49,7 +49,7 @@ async function genKey(req, res) {
   const name = new Name(req.body.name);
   /** @type {import("@ndn/keychain").EcCurve} */
   const curve = req.body.curve;
-  const [privateKey] = await EcPrivateKey.generate(name, curve, keyChain);
+  const [privateKey] = await generateSigningKey(keyChain, name, ECDSA, { curve });
   message(`Key ${AltUri.ofName(privateKey.name)} generated.`, nextList)(req, res);
 }
 
@@ -61,9 +61,13 @@ async function reqForm(req, res) {
     days = 30;
   }
 
-  const [privateKey, publicKey] = await keyChain.getKeyPair(name);
+  const { signer, publicKey } = await keyChain.getKeyPair(name);
   const validity = ValidityPeriod.daysFromNow(days);
-  const cert = await Certificate.selfSign({ privateKey, publicKey, validity });
+  const cert = await Certificate.selfSign({
+    privateKey: signer,
+    publicKey,
+    validity,
+  });
   const subjectName = CertNaming.toSubjectName(cert.name);
   template("keychain-req", { name, days, cert, subjectName })(req, res);
 }

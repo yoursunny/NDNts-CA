@@ -75,12 +75,12 @@ const certProducers = new Map();
 export async function initialize() {
   await openUplinks();
 
-  /** @type {import("@ndn/keychain").PrivateKey|undefined} */
+  /** @type {import("@ndn/keychain").NamedSigner|undefined} */
   let key;
   try {
     const profileData = new Decoder(await fs.readFile(env.profile)).decode(Data);
     profile = await CaProfile.fromData(profileData);
-    key = await keyChain.getPrivateKey(CertNaming.toKeyName(profile.cert.name));
+    key = await keyChain.getKey(CertNaming.toKeyName(profile.cert.name), "signer");
   } catch {
     try {
       await fs.unlink(env.profile);

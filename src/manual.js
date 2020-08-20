@@ -15,9 +15,9 @@ async function requestForm(req, res) {
 /** @type {import("express").Handler} */
 async function requestSubmit(req, res) {
   const certreq = certFromBase64(req.body.certreq);
-  const publicKey = await certreq.loadPublicKey();
+  const publicKey = await certreq.createVerifier();
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
-  const issuerPrivateKey = await keyChain.getPrivateKey(CertNaming.toKeyName(issuer.name));
+  const issuerPrivateKey = await keyChain.getKey(CertNaming.toKeyName(issuer.name), "signer");
   const validDays = Number.parseInt(req.body.validdays, 10);
   const cert = await Certificate.issue({
     issuerPrivateKey,
