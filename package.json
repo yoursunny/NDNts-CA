@@ -2,8 +2,8 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "pnpm-install": "pnpm install --shamefully-hoist",
     "lint": "xo --fix",
+    "pnpm-install": "pnpm install --shamefully-hoist",
     "postinstall": "node postinstall.js",
     "start": "nodemon -w .env -w src server.js",
     "typecheck": "tsc"
@@ -35,8 +35,7 @@
   "devDependencies": {
     "@types/express": "^4.17.6",
     "@types/node": "^14.0.14",
-    "eslint-plugin-simple-import-sort": "^5.0.3",
-    "typescript": "^3.9.6",
-    "xo": "^0.33.0"
+    "@yoursunny/xo-config": "^0.33.0",
+    "typescript": "^3.9.6"
   }
 }

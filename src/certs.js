@@ -22,7 +22,7 @@ async function act(req, res) {
   /** @type {import("@ndn/packet").Name[]} */
   let names = [];
   if (Array.isArray(req.body.name)) {
-    names = req.body.name.map(nameFromHex); // eslint-disable-line unicorn/no-fn-reference-in-iterator
+    names = req.body.name.map(nameFromHex);
   } else if (typeof req.body.name === "string") {
     names.push(nameFromHex(req.body.name));
   }

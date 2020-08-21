@@ -1,5 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
-
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
 import { Endpoint } from "@ndn/endpoint";
 import { Certificate, CertNaming } from "@ndn/keychain";
@@ -98,7 +96,6 @@ export async function initialize() {
     repo,
     profile,
     key,
-    // eslint-disable-next-line unicorn/no-fn-reference-in-iterator
     challenges: env.challenges.map(makeChallenge),
     issuerId: "NDNts-Personal-CA",
   });
