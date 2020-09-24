@@ -10,7 +10,7 @@ It is great for:
 
 System requirements:
 
-* Node.js >=12.17, >=14.4
+* Node.js 14.x
 * Windows 10, Debian 10, or Ubuntu 18.04
 
 Setup steps:
@@ -34,16 +34,25 @@ You can then obtain sub-certificates from this Personal CA using one of these me
 * use a NDNCERT v0.3 client
 * use "submit a certificate request" page
 
-### Try on Glitch
+### Try on Anyfiddle
 
-You can try NDNts Personal CA on [Glitch](https://glitch.com), without local installation.
+You can try NDNts Personal CA on [Anyfiddle](https://anyfiddle.com), without local installation.
 
-1. [Import the Project](https://glitch.com/#!/import/github/yoursunny/NDNts-CA/)
-2. Select *Tools - Terminal*. In the terminal, execute `bash glitch-init.sh`.
-3. Wait about 1 minute for dependency installation. You may watch the progress in *Tools - Logs*. `http://localhost:3000` indicates the application is ready.
-4. Select *Show - in a new window* to open the application.
+1. Create a project from *NodeJS* template (Node 14.x).
+2. Download the code: `git init && git fetch https://github.com/yoursunny/NDNts-CA.git && git checkout FETCH_HEAD`
+3. Install dependencies: `npm install`
+4. Edit file `anyfiddle.json`:
 
-Note that Glitch is unsuitable for long-term installation, because anyone who knows your Glitch application name will be able to access your CA, and the NDNCERT server is available only if you are accessing the Glitch application from the web.
+    ```json
+    {
+       "defaultCommand": "npm start",
+       "port": 8722
+    }
+    ```
+
+5. Click "▶️Run" button to start the project, and visit the provided web address.
+
+Note that Anyfiddle is unsuitable for long-term installation, because anyone who knows your project name will be able to access your CA, and the NDNCERT server is available only if you have the editor open.
 
 ## Technical Information
 

@@ -1,5 +1,6 @@
-ecosystem.config.js
 .env
+anyfiddle.json
+ecosystem.config.js
 node_modules/
 package-lock.json
 pnpm-lock.yaml
