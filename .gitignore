@@ -1,4 +1,5 @@
 .env
+.vscode
 anyfiddle.json
 ecosystem.config.js
 node_modules/
