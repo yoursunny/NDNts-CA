@@ -1,14 +1,12 @@
 import { CertNaming } from "@ndn/keychain";
 import { CaProfile } from "@ndn/ndncert";
 import { Encoder } from "@ndn/tlv";
-import module from "module";
+import gracefulfs from "graceful-fs";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
 import { handleError, message, nameFromHex, template } from "./helper.js";
 
-export const require = module.createRequire(import.meta.url);
-/** @type {import("graceful-fs")} */
-const { promises: fs } = require("graceful-fs");
+const { promises: fs } = gracefulfs;
 
 /** @type {import("express").Handler} */
 async function download(req, res) {

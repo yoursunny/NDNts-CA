@@ -2,11 +2,7 @@ import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } fr
 import { AltUri } from "@ndn/naming-convention2";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Name } from "@ndn/packet";
-import module from "module";
-
-export const require = module.createRequire(import.meta.url);
-/** @type {import("got").Got} */
-const got = require("got").default;
+import got from "got";
 
 import { keyChain } from "./env.js";
 import { certFromBase64, handleError, message, nameFromHex, template } from "./helper.js";

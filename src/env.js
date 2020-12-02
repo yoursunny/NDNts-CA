@@ -4,17 +4,14 @@ import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/
 import { Data } from "@ndn/packet";
 import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
+import strattadbEnvironment from "@strattadb/environment";
 import dotenv from "dotenv";
+import * as envfile from "envfile";
+import gracefulfs from "graceful-fs";
 import leveldown from "leveldown";
-import module from "module";
 
-export const require = module.createRequire(import.meta.url);
-/** @type {import("@strattadb/environment")} */
-const { makeEnv, parsers } = require("@strattadb/environment");
-/** @type {import("envfile")} */
-const envfile = require("envfile");
-/** @type {import("graceful-fs")} */
-const { promises: fs } = require("graceful-fs");
+const { promises: fs } = gracefulfs;
+const { makeEnv, parsers } = strattadbEnvironment;
 
 dotenv.config();
 
