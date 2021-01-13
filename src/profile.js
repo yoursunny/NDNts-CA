@@ -43,7 +43,7 @@ async function newSubmit(req, res) {
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);
   const profile = await CaProfile.build({
-    prefix: CertNaming.toSubjectName(cert.name).append("CA"),
+    prefix: CertNaming.toSubjectName(cert.name),
     info,
     probeKeys: [],
     maxValidityPeriod,
