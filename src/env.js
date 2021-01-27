@@ -79,6 +79,7 @@ export async function initialize() {
     return;
   }
 
+  await repo.insert(profile.cert.data);
   repoProducer = RepoProducer.create(repo, {
     reg: PrefixRegShorter(2),
   });
