@@ -1,5 +1,4 @@
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
-import { CertNaming } from "@ndn/keychain";
 import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data } from "@ndn/packet";
 import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
@@ -66,12 +65,12 @@ let server;
 export async function initialize() {
   await openUplinks();
 
-  /** @type {import("@ndn/keychain").NamedSigner|undefined} */
-  let key;
+  /** @type {import("@ndn/packet").Signer|undefined} */
+  let signer;
   try {
     const profileData = new Decoder(await fs.readFile(env.profile)).decode(Data);
     profile = await CaProfile.fromData(profileData);
-    key = await keyChain.getKey(CertNaming.toKeyName(profile.cert.name), "signer");
+    signer = await keyChain.getSigner(profile.cert.name);
   } catch {
     try {
       await fs.unlink(env.profile);
@@ -87,7 +86,7 @@ export async function initialize() {
   server = Server.create({
     repo,
     profile,
-    key,
+    signer,
     challenges: env.challenges.map(makeChallenge),
     issuerId: "NDNts-Personal-CA",
   });
