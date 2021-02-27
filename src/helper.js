@@ -2,48 +2,41 @@ import { Certificate, CertNaming } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { Data, Name } from "@ndn/packet";
 import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
-import module from "module";
+import fastChunkString from "fast-chunk-string";
 import numd from "numd";
 
-export const require = module.createRequire(import.meta.url);
-/** @type {import("fast-chunk-string")} */
-const fastChunkString = require("fast-chunk-string");
+export const viewHelpers = {
+  CertNaming,
 
-/** @param {import("express").Express} app */
-export function registerViewHelpers(app) {
-  app.locals.helper = {
-    CertNaming,
+  numd,
 
-    numd,
+  /**
+   * @param {import("@ndn/packet").Name} name
+   * @returns {string}
+   */
+  altUri(name) {
+    return AltUri.ofName(name);
+  },
 
-    /**
-     * @param {import("@ndn/packet").Name} name
-     * @returns {string}
-     */
-    altUri(name) {
-      return AltUri.ofName(name);
-    },
+  toHex,
 
-    toHex,
+  /**
+   * @param {import("@ndn/packet").Name} name
+   * @returns {string}
+   */
+  nameHex(name) {
+    return toHex(name.value);
+  },
 
-    /**
-     * @param {import("@ndn/packet").Name} name
-     * @returns {string}
-     */
-    nameHex(name) {
-      return toHex(name.value);
-    },
-
-    /**
-     * @param {Certificate} cert
-     * @returns {string}
-     */
-    certBase64(cert) {
-      const b64 = Buffer.from(Encoder.encode(cert.data)).toString("base64");
-      return fastChunkString(b64, { size: 64 }).join("\n");
-    },
-  };
-}
+  /**
+   * @param {Certificate} cert
+   * @returns {string}
+   */
+  certBase64(cert) {
+    const b64 = Buffer.from(Encoder.encode(cert.data)).toString("base64");
+    return fastChunkString(b64, { size: 64 }).join("\n");
+  },
+};
 
 /**
  * Parse hex name from query or body.
@@ -69,26 +62,14 @@ export function certFromBase64(input) {
 }
 
 /**
- * Wrap an async Express handler with error handling.
- * @param {import("express").Handler} asyncHandler
- * @returns {import("express").Handler}
- */
-export function handleError(asyncHandler) {
-  return (req, res, next) => {
-    Promise.resolve(asyncHandler(req, res, next))
-      .catch(next);
-  };
-}
-
-/**
  * Render a template.
  * @param {string} view
  * @param {object} [options]
- * @returns {(req: import("express").Request, res: import("express").Response) => void}
+ * @returns {(...args: Parameters<import("fastify").RouteHandler>) => void}
  */
 export function template(view, options) {
-  return (req, res) => {
-    res.render(view, options);
+  return (req, reply) => {
+    reply.view(view, options);
   };
 }
 
@@ -103,7 +84,7 @@ const MESSAGE_NEXT = {
  * @param {object} opts
  * @param {string} [opts.title]
  * @param {"home"|"back"|string} [opts.next]
- * @returns {(req: import("express").Request, res: import("express").Response) => void}
+ * @returns {(...args: Parameters<import("fastify").RouteHandler>) => void}
  */
 export function message(message, opts = {}) {
   const {
@@ -114,7 +95,5 @@ export function message(message, opts = {}) {
   if (!nextAction) {
     nextAction = `location = decodeURI('${encodeURI(next)}')`;
   }
-  return (req, res) => {
-    res.render("message", { message, title, nextAction });
-  };
+  return template("message", { message, title, nextAction });
 }

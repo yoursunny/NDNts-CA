@@ -3,17 +3,17 @@ import { Component } from "@ndn/packet";
 import { toHex } from "@ndn/tlv";
 
 import { keyChain, repo } from "./env.js";
-import { certFromBase64, handleError, nameFromHex, template } from "./helper.js";
+import { certFromBase64, nameFromHex, template } from "./helper.js";
 
-/** @type {import("express").Handler} */
-async function requestForm(req, res) {
-  template("manual-request", {
+/** @type {import("fastify").RouteHandler} */
+async function requestForm(req, reply) {
+  return template("manual-request", {
     certNames: await keyChain.listCerts(),
-  })(req, res);
+  })(req, reply);
 }
 
-/** @type {import("express").Handler} */
-async function requestSubmit(req, res) {
+/** @type {import("fastify").RouteHandler<{ Body: Record<"certreq"|"issuer"|"validdays", string> }>} */
+async function requestSubmit(req, reply) {
   const certreq = certFromBase64(req.body.certreq);
   const publicKey = await certreq.createVerifier();
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
@@ -27,19 +27,20 @@ async function requestSubmit(req, res) {
   });
 
   await repo.insert(cert.data);
-  res.redirect(`manual-issued.html?name=${toHex(cert.name.value)}`);
+  reply.redirect(`manual-issued.html?name=${toHex(cert.name.value)}`);
+  return Promise.resolve();
 }
 
-/** @type {import("express").Handler} */
-async function viewIssued(req, res) {
+/** @type {import("fastify").RouteHandler<{ Querystring: { name: string } }>} */
+async function viewIssued(req, reply) {
   const name = nameFromHex(String(req.query.name));
   const cert = Certificate.fromData(await repo.get(name));
-  template("manual-issued", { cert })(req, res);
+  return template("manual-issued", { cert })(req, reply);
 }
 
-/** @param {import("express").Express} app */
-export function register(app) {
-  app.get("/manual-request.html", handleError(requestForm));
-  app.post("/manual-submit.cgi", handleError(requestSubmit));
-  app.get("/manual-issued.html", handleError(viewIssued));
+/** @param {import("fastify").FastifyInstance} fastify */
+export function register(fastify) {
+  fastify.get("/manual-request.html", requestForm);
+  fastify.post("/manual-submit.cgi", requestSubmit);
+  fastify.get("/manual-issued.html", viewIssued);
 }

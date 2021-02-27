@@ -2,22 +2,22 @@ import { Certificate } from "@ndn/keychain";
 import numd from "numd";
 
 import { repo } from "./env.js";
-import { handleError, message, nameFromHex, template } from "./helper.js";
+import { message, nameFromHex, template } from "./helper.js";
 
 const nextList = { next: "certs-list.html" };
 
-/** @type {import("express").Handler} */
-async function list(req, res) {
+/** @type {import("fastify").RouteHandler} */
+async function list(req, reply) {
   /** @type {Certificate[]} */
   const certs = [];
   for await (const data of repo.listData()) {
     certs.push(Certificate.fromData(data));
   }
-  template("certs-list", { certs })(req, res);
+  return template("certs-list", { certs })(req, reply);
 }
 
-/** @type {import("express").Handler} */
-async function act(req, res) {
+/** @type {import("fastify").RouteHandler<{ Body: Record<"act"|"name", string> }>} */
+async function act(req, reply) {
   const act = req.body.act;
   /** @type {import("@ndn/packet").Name[]} */
   let names = [];
@@ -30,16 +30,15 @@ async function act(req, res) {
   switch (act) {
     case "delete": {
       await repo.delete(...names);
-      message(`${numd(names.length, "certificate", "certificates")} deleted.`, nextList)(req, res);
-      break;
+      return message(`${numd(names.length, "certificate", "certificates")} deleted.`, nextList)(req, reply);
     }
     default:
       throw new Error("unknown action");
   }
 }
 
-/** @param {import("express").Express} app */
-export function register(app) {
-  app.get("/certs-list.html", handleError(list));
-  app.post("/certs-act.cgi", handleError(act));
+/** @param {import("fastify").FastifyInstance} fastify */
+export function register(fastify) {
+  fastify.get("/certs-list.html", list);
+  fastify.post("/certs-act.cgi", act);
 }

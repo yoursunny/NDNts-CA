@@ -4,37 +4,32 @@ import { Encoder } from "@ndn/tlv";
 import gracefulfs from "graceful-fs";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
-import { handleError, message, nameFromHex, template } from "./helper.js";
+import { message, nameFromHex, template } from "./helper.js";
 
 const { promises: fs } = gracefulfs;
 
-/** @type {import("express").Handler} */
-async function download(req, res) {
+/** @type {import("fastify").RouteHandler} */
+async function download(req, reply) {
   if (!profile) {
-    res.status(404).end();
+    reply.status(404);
     return;
   }
-  res.contentType("application/octet-stream");
-  res.send(Buffer.from(Encoder.encode(profile.data)));
+  reply.header("Content-Type", "application/octet-stream");
+  reply.send(Buffer.from(Encoder.encode(profile.data)));
 }
 
-/** @type {import("express").Handler} */
-async function view(req, res) {
-  return template("profile-view")(req, res);
-}
-
-/** @type {import("express").Handler} */
-async function newForm(req, res) {
-  template("profile-new", {
+/** @type {import("fastify").RouteHandler} */
+async function newForm(req, reply) {
+  return template("profile-new", {
     certNames: await keyChain.listCerts(),
-  })(req, res);
+  })(req, reply);
 }
 
-/** @type {import("express").Handler} */
-async function newSubmit(req, res) {
+/** @type {import("fastify").RouteHandler<{ Body: Record<"cert"|"info"|"validdays"|"challenge-nop"|"challenge-pin", string> }>} */
+async function newSubmit(req, reply) {
   const challenges = ["nop", "pin"].filter((challenge) => req.body[`challenge-${challenge}`] === "1");
   if (challenges.length === 0) {
-    message("At least one challenge is required.", { next: "back" })(req, res);
+    message("At least one challenge is required.", { next: "back" })(req, reply);
     return;
   }
 
@@ -52,23 +47,24 @@ async function newSubmit(req, res) {
   });
   await fs.writeFile(env.profile, Encoder.encode(profile.data));
 
-  message("Profile saved, restarting server.")(req, res);
-  res.end();
+  message("Profile saved, restarting server.")(req, reply);
 
-  const keyName = signer.name.toString();
-  await modifyEnv({
-    NDNTS_KEY: keyName,
-    NDNTS_NFDREGKEY: keyName,
-    CA_KEY: keyName,
-    CA_CHALLENGES: challenges.join(),
-  });
+  setTimeout(async () => {
+    const keyName = signer.name.toString();
+    await modifyEnv({
+      NDNTS_KEY: keyName,
+      NDNTS_NFDREGKEY: keyName,
+      CA_KEY: keyName,
+      CA_CHALLENGES: challenges.join(),
+    });
+  }, 0);
 }
 
-/** @param {import("express").Express} app */
-export function register(app) {
-  app.get("/profile.html", handleError(view));
-  app.get("/profile.data", handleError(download));
+/** @param {import("fastify").FastifyInstance} fastify */
+export function register(fastify) {
+  fastify.get("/profile.html", template("profile-view"));
+  fastify.get("/profile.data", download);
 
-  app.get("/profile-new.html", handleError(newForm));
-  app.post("/profile-new.cgi", handleError(newSubmit));
+  fastify.get("/profile-new.html", newForm);
+  fastify.post("/profile-new.cgi", newSubmit);
 }
