@@ -61,7 +61,7 @@ Note that Anyfiddle is unsuitable for long-term installation, because anyone who
 NDNts Personal CA is built with:
 
 * [NDNts](https://yoursunny.com/p/NDNts/), Named Data Networking libraries for the modern web.
-* [Express](https://expressjs.com/) web framework.
+* [Fastify](https://www.fastify.io/) web framework.
 
 This project shows how to write a Node.js application with NDNts libraries.
 It also demonstrates these NDNts capabilities:

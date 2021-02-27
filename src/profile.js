@@ -34,7 +34,7 @@ async function newSubmit(req, reply) {
   }
 
   const cert = await keyChain.getCert(nameFromHex(req.body.cert));
-  const signer = await keyChain.getKey(CertNaming.toKeyName(cert.name), "signer");
+  const signer = await keyChain.getSigner(cert.name);
   const info = String(req.body.info).trim();
   const maxValidityPeriod = 86400000 * Number.parseInt(req.body.validdays, 10);
   const profile = await CaProfile.build({
@@ -50,11 +50,11 @@ async function newSubmit(req, reply) {
   message("Profile saved, restarting server.")(req, reply);
 
   setTimeout(async () => {
-    const keyName = signer.name.toString();
+    const certName = cert.name.toString();
     await modifyEnv({
-      NDNTS_KEY: keyName,
-      NDNTS_NFDREGKEY: keyName,
-      CA_KEY: keyName,
+      NDNTS_KEY: certName,
+      NDNTS_NFDREGKEY: certName,
+      CA_KEY: certName,
       CA_CHALLENGES: challenges.join(),
     });
   }, 0);
