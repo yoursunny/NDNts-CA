@@ -23,7 +23,7 @@
     "ejs": "^3.1.6",
     "envfile": "^6.14.0",
     "fast-chunk-string": "^1.0.1",
-    "fastify": "^3.12.0",
+    "fastify": "^3.14.0",
     "fastify-formbody": "^5.0.0",
     "fastify-static": "^4.0.1",
     "got": "^11.8.2",
@@ -32,11 +32,11 @@
     "leveldown": "^5.6.0",
     "nodemon": "^2.0.7",
     "numd": "^3.1.0",
-    "point-of-view": "^4.13.0"
+    "point-of-view": "^4.14.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.34",
     "@yoursunny/xo-config": "^0.38.0",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }

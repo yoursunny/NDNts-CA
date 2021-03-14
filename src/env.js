@@ -1,7 +1,7 @@
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
-import { CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
-import { Data } from "@ndn/packet";
-import { DataStore, PrefixRegShorter, RepoProducer } from "@ndn/repo";
+import { C as ndncertC, CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
+import { Data, FwHint } from "@ndn/packet";
+import { DataStore, PrefixRegStatic, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
 import strattadbEnvironment from "@strattadb/environment";
 import dotenv from "dotenv";
@@ -79,12 +79,14 @@ export async function initialize() {
   }
 
   await repo.insert(profile.cert.data);
+  const repoPrefix = profile.prefix.append(ndncertC.CA);
   repoProducer = RepoProducer.create(repo, {
-    reg: PrefixRegShorter(2),
+    reg: PrefixRegStatic(repoPrefix, profile.cert.name),
   });
 
   server = Server.create({
     repo,
+    repoFwHint: new FwHint([new FwHint.Delegation(repoPrefix)]),
     profile,
     signer,
     challenges: env.challenges.map(makeChallenge),
