@@ -55,7 +55,7 @@ async function newSubmit(req, reply) {
       NDNTS_KEY: certName,
       NDNTS_NFDREGKEY: certName,
       CA_KEY: certName,
-      CA_CHALLENGES: challenges.join(),
+      CA_CHALLENGES: challenges.join(","),
     });
   }, 0);
 }

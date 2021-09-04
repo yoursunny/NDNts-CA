@@ -2,7 +2,7 @@ import ejs from "ejs";
 import Fastify from "fastify";
 import FastifyFormbody from "fastify-formbody";
 import FastifyStatic from "fastify-static";
-import path from "path";
+import path from "node:path";
 import PointOfView from "point-of-view";
 
 import { register as certsRoutes } from "./certs.js";
@@ -44,5 +44,5 @@ fastify.setErrorHandler((err, req, reply) => {
 fastify.register(FastifyStatic, {
   root: path.resolve(process.cwd(), "public"),
 });
-fastify.listen(env.httpport);
+fastify.listen(env.port, env.host);
 })();

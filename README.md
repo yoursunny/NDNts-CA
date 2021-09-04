@@ -10,8 +10,8 @@ It is great for:
 
 System requirements:
 
-* Node.js 16.x
-* Windows 10, Debian 10, or Ubuntu 20.04
+* Node.js 14.x or 16.x
+* Windows 10, Debian 11, or Ubuntu 20.04
 
 Setup steps:
 
@@ -36,21 +36,12 @@ You can then obtain sub-certificates from this Personal CA using one of these me
 
 ### Try on Anyfiddle
 
-You can try NDNts Personal CA on [Anyfiddle](https://anyfiddle.com), without local installation.
+You can try NDNts Personal CA without local installation on [Anyfiddle](https://anyfiddle.com).
 
-1. Create a project from *NodeJS* template (Node 14.x).
-2. Download the code: `git init && git fetch https://github.com/yoursunny/NDNts-CA.git && git checkout FETCH_HEAD`
-3. Install dependencies: `npm install`
-4. Edit file `anyfiddle.json`:
-
-    ```json
-    {
-       "defaultCommand": "npm start",
-       "port": 8722
-    }
-    ```
-
-5. Click "▶️Run" button to start the project, and visit the provided web address.
+1. [Open yoursunny/NDNts-CA on Anyfile](https://githubaf.com/yoursunny/NDNts-CA)
+2. Install dependencies: `npm install`
+3. Start the project: `npm start`
+4. Visit the provided web address.
 
 Note that Anyfiddle is unsuitable for long-term installation, because anyone who knows your project name will be able to access your CA, and the NDNCERT server is available only if you have the editor open.
 
@@ -61,7 +52,7 @@ Note that Anyfiddle is unsuitable for long-term installation, because anyone who
 NDNts Personal CA is built with:
 
 * [NDNts](https://yoursunny.com/p/NDNts/), Named Data Networking libraries for the modern web.
-* [Fastify](https://www.fastify.io/) web framework.
+* [Fastify](https://www.fastify.io) web framework.
 
 This project shows how to write a Node.js application with NDNts libraries.
 It also demonstrates these NDNts capabilities:

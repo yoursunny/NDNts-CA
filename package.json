@@ -20,22 +20,23 @@
     "@strattadb/environment": "^8.0.2",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
-    "envfile": "^6.14.0",
+    "envfile": "^6.17.0",
     "fast-chunk-string": "^1.0.1",
-    "fastify": "^3.18.0",
-    "fastify-formbody": "^5.0.0",
-    "fastify-static": "^4.2.2",
+    "fastify": "^3.20.2",
+    "fastify-formbody": "^5.1.0",
+    "fastify-static": "^4.2.3",
     "got": "^11.8.2",
-    "graceful-fs": "^4.2.6",
+    "graceful-fs": "^4.2.8",
     "hard-rejection": "^2.1.0",
-    "leveldown": "^6.0.0",
-    "nodemon": "^2.0.7",
+    "leveldown": "^6.0.1",
+    "nodemon": "^2.0.12",
     "numd": "^3.1.0",
-    "point-of-view": "^4.15.0"
+    "point-of-view": "^4.15.2"
   },
   "devDependencies": {
-    "@types/node": "^15.12.5",
-    "@yoursunny/xo-config": "^0.40.1",
-    "typescript": "^4.3.4"
+    "@types/node": "^16.7.10",
+    "@types/web": "^0.0.27",
+    "@yoursunny/xo-config": "^0.44.0",
+    "typescript": "~4.4.2"
   }
 }

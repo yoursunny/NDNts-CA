@@ -15,10 +15,17 @@ const { makeEnv, parsers } = strattadbEnvironment;
 dotenv.config();
 
 export const env = makeEnv({
-  httpport: {
+  host: {
+    envVarName: "CA_HTTP_HOST",
+    parser: parsers.ipAddress,
+    required: false,
+    defaultValue: "127.0.0.1",
+  },
+  port: {
     envVarName: "CA_HTTP_PORT",
     parser: parsers.port,
-    required: true,
+    required: false,
+    defaultValue: 8722,
   },
   repo: {
     envVarName: "CA_REPO",
