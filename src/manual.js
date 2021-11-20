@@ -1,4 +1,4 @@
-import { Certificate, ValidityPeriod } from "@ndn/keychain";
+import { Certificate, createVerifier, ValidityPeriod } from "@ndn/keychain";
 import { Component } from "@ndn/packet";
 import { toHex } from "@ndn/tlv";
 
@@ -15,7 +15,7 @@ async function requestForm(req, reply) {
 /** @type {import("fastify").RouteHandler<{ Body: Record<"certreq"|"issuer"|"validdays", string> }>} */
 async function requestSubmit(req, reply) {
   const certreq = certFromBase64(req.body.certreq);
-  const publicKey = await certreq.createVerifier();
+  const publicKey = await createVerifier(certreq);
   const issuer = await keyChain.getCert(nameFromHex(req.body.issuer));
   const issuerPrivateKey = await keyChain.getSigner(issuer.name);
   const validDays = Number.parseInt(req.body.validdays, 10);

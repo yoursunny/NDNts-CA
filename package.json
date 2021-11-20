@@ -22,10 +22,10 @@
     "ejs": "^3.1.6",
     "envfile": "^6.17.0",
     "fast-chunk-string": "^1.0.1",
-    "fastify": "^3.23.1",
+    "fastify": "^3.24.0",
     "fastify-formbody": "^5.2.0",
     "fastify-static": "^4.5.0",
-    "got": "^11.8.2",
+    "got": "^11.8.3",
     "graceful-fs": "^4.2.8",
     "hard-rejection": "^2.1.0",
     "leveldown": "^6.1.0",
@@ -34,9 +34,9 @@
     "point-of-view": "^4.15.2"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
-    "@types/web": "0.0.47",
+    "@types/node": "^16.11.9",
+    "@typescript/lib-dom": "npm:@types/web@0.0.46",
     "@yoursunny/xo-config": "^0.45.1",
-    "typescript": "~4.4.4"
+    "typescript": "~4.5.2"
   }
 }

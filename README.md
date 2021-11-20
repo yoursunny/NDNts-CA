@@ -10,7 +10,7 @@ It is great for:
 
 System requirements:
 
-* Node.js 14.x or 16.x
+* Node.js 16.x
 * Windows 10, Debian 11, or Ubuntu 20.04
 
 Setup steps:
