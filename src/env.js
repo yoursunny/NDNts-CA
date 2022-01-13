@@ -93,7 +93,7 @@ export async function initialize() {
 
   server = Server.create({
     repo,
-    repoFwHint: new FwHint([new FwHint.Delegation(repoPrefix)]),
+    repoFwHint: new FwHint(repoPrefix),
     profile,
     signer,
     challenges: env.challenges.map(makeChallenge),

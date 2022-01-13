@@ -34,17 +34,6 @@ You can then obtain sub-certificates from this Personal CA using one of these me
 * use a NDNCERT v0.3 client
 * use "submit a certificate request" page
 
-### Try on Anyfiddle
-
-You can try NDNts Personal CA without local installation on [Anyfiddle](https://anyfiddle.com).
-
-1. [Open yoursunny/NDNts-CA on Anyfile](https://githubaf.com/yoursunny/NDNts-CA)
-2. Install dependencies: `npm install`
-3. Start the project: `npm start`
-4. Visit the provided web address.
-
-Note that Anyfiddle is unsuitable for long-term installation, because anyone who knows your project name will be able to access your CA, and the NDNCERT server is available only if you have the editor open.
-
 ## Technical Information
 
 ![NDNts logo](public/logo.svg)
