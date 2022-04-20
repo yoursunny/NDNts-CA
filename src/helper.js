@@ -1,7 +1,8 @@
 import { Certificate, CertNaming } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { Data, Name } from "@ndn/packet";
-import { Decoder, Encoder, fromHex, toHex } from "@ndn/tlv";
+import { Decoder, Encoder } from "@ndn/tlv";
+import { fromHex, toHex } from "@ndn/util";
 import fastChunkString from "fast-chunk-string";
 import numd from "numd";
 
@@ -19,14 +20,6 @@ export const viewHelpers = {
   },
 
   toHex,
-
-  /**
-   * @param {import("@ndn/packet").Name} name
-   * @returns {string}
-   */
-  nameHex(name) {
-    return toHex(name.value);
-  },
 
   /**
    * @param {Certificate} cert

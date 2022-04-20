@@ -1,6 +1,5 @@
 import { Certificate, createVerifier, ValidityPeriod } from "@ndn/keychain";
 import { Component } from "@ndn/packet";
-import { toHex } from "@ndn/tlv";
 
 import { keyChain, repo } from "./env.js";
 import { certFromBase64, nameFromHex, template } from "./helper.js";
@@ -27,8 +26,7 @@ async function requestSubmit(req, reply) {
   });
 
   await repo.insert(cert.data);
-  reply.redirect(`manual-issued.html?name=${toHex(cert.name.value)}`);
-  return Promise.resolve();
+  reply.redirect(`manual-issued.html?name=${cert.name.valueHex}`);
 }
 
 /** @type {import("fastify").RouteHandler<{ Querystring: { name: string } }>} */

@@ -12,7 +12,7 @@ This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with Va
 </pre>
 
 <form action="keychain-req.html" method="get" class="pure-form">
-<input type="hidden" name="name" value="<%= helper.nameHex(name) %>">
+<input type="hidden" name="name" value="<%= name.valueHex %>">
 <fieldset>
 <legend>Change ValidityPeriod</legend>
 <label for="f_days">Days</label>

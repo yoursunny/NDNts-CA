@@ -15,15 +15,15 @@
   <td colspan="2"><%= helper.altUri(keyName) %></td>
   <td>
     <form action="keychain-delete-key.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete key <%= helper.altUri(keyName) %>?')">
-      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
+      <input type="hidden" name="name" value="<%= keyName.valueHex %>">
       <button type="submit" class="pure-button" title="delete key">delete</button>
     </form>
     <form action="keychain-selfsign.cgi" method="post">
-      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
+      <input type="hidden" name="name" value="<%= keyName.valueHex %>">
       <button type="submit" class="pure-button" title="create self-signed certificate">self sign</button>
     </form>
     <form action="keychain-req.html" method="get">
-      <input type="hidden" name="name" value="<%= helper.nameHex(keyName) %>">
+      <input type="hidden" name="name" value="<%= keyName.valueHex %>">
       <button type="submit" class="pure-button" title="request a certificate from another CA">request cert</button>
     </form>
   </td>
@@ -34,7 +34,7 @@
   <td><%= helper.altUri(certName) %></td>
   <td>
     <form action="keychain-delete-cert.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete certificate <%= helper.altUri(certName) %>?')">
-      <input type="hidden" name="name" value="<%= helper.nameHex(certName) %>">
+      <input type="hidden" name="name" value="<%= certName.valueHex %>">
       <button type="submit" class="pure-button" title="delete certificate">delete</button>
     </form>
   </td>

@@ -11,7 +11,7 @@
 <label for="f_cert">CA certificate</label>
 <select id="f_cert" name="cert" required>
 <% for (const certName of certNames) { -%>
-<option value="<%= helper.nameHex(certName) %>"><%= helper.altUri(certName) %></option>
+<option value="<%= certName.valueHex %>"><%= helper.altUri(certName) %></option>
 <% } -%>
 </select>
 <% if (certNames.length === 0) { -%>

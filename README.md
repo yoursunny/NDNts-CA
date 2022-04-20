@@ -10,14 +10,14 @@ It is great for:
 
 System requirements:
 
-* Node.js 16.x
+* Node.js 17.x
 * Windows 10, Debian 11, or Ubuntu 20.04
 
 Setup steps:
 
 1. Clone the repository.
-2. Execute `npm install`, or `pnpm install` if you have PNPM.
-3. Run `npm start`, or `pm2 start ecosystem.config.js` for production deployment with PM2.
+2. Execute `corepack pnpm install`.
+3. Run `corepack pnpm start`, or `pm2 start ecosystem.config.js` for production deployment with PM2.
 4. Visit `http://localhost:8722/` in a web browser.
 5. If using PM2, you have to manually restart the service with `pm2 restart ecosystem.config.js` after changing CA profile.
 

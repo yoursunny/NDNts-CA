@@ -14,7 +14,7 @@
 <tbody>
 <% for (const cert of certs) { -%>
 <tr>
-  <td><input type="checkbox" name="name" value="<%= helper.nameHex(cert.name) %>"></td>
+  <td><input type="checkbox" name="name" value="<%= cert.name.valueHex %>"></td>
   <td><%= helper.altUri(cert.name) %></td>
   <td><%= cert.validity %></td>
 </tr>
