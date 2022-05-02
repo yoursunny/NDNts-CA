@@ -26,7 +26,7 @@ async function requestSubmit(req, reply) {
   });
 
   await repo.insert(cert.data);
-  reply.redirect(`manual-issued.html?name=${cert.name.valueHex}`);
+  return reply.redirect(`manual-issued.html?name=${cert.name.valueHex}`);
 }
 
 /** @type {import("fastify").RouteHandler<{ Querystring: { name: string } }>} */

@@ -1,7 +1,7 @@
+import FastifyFormbody from "@fastify/formbody";
+import FastifyStatic from "@fastify/static";
 import ejs from "ejs";
 import Fastify from "fastify";
-import FastifyFormbody from "fastify-formbody";
-import FastifyStatic from "fastify-static";
 import path from "node:path";
 import PointOfView from "point-of-view";
 
