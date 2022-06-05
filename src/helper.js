@@ -72,7 +72,7 @@ const MESSAGE_NEXT = {
 };
 
 /**
- * Display message and optionally redirect back to frontpage.
+ * Display message and then redirect to another page.
  * @param {string} message
  * @param {object} opts
  * @param {string} [opts.title]
@@ -84,9 +84,6 @@ export function message(message, opts = {}) {
     title = "Message",
     next = "home",
   } = opts;
-  let nextAction = MESSAGE_NEXT[next];
-  if (!nextAction) {
-    nextAction = `location = decodeURI('${encodeURI(next)}')`;
-  }
+  const nextAction = MESSAGE_NEXT[next] ?? `location = decodeURI('${encodeURI(next)}')`;
   return template("message", { message, title, nextAction });
 }

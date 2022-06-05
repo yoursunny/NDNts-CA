@@ -51,7 +51,7 @@ export const env = makeEnv({
  */
 export async function modifyEnv(changes) {
   /** @type {Record<string, string>} */
-  const fenv = envfile.parse(await fs.readFile(".env", { encoding: "utf-8" }));
+  const fenv = envfile.parse(await fs.readFile(".env", { encoding: "utf8" }));
   Object.assign(fenv, changes);
   await fs.writeFile(".env", envfile.stringify(fenv));
 }

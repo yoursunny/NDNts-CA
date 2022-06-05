@@ -12,7 +12,6 @@ import { register as keychainRoutes } from "./keychain.js";
 import { register as manualRoutes } from "./manual.js";
 import { register as profileRoutes } from "./profile.js";
 
-(async () => {
 await initialize();
 
 const fastify = Fastify({
@@ -44,5 +43,7 @@ fastify.setErrorHandler((err, req, reply) => {
 fastify.register(FastifyStatic, {
   root: path.resolve(process.cwd(), "public"),
 });
-fastify.listen(env.port, env.host);
-})();
+fastify.listen({
+  port: env.port,
+  host: env.host,
+});
