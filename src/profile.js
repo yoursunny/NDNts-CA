@@ -57,7 +57,7 @@ async function newSubmit(req, reply) {
       CA_KEY: certName,
       CA_CHALLENGES: challenges.join(","),
     });
-  }, 0);
+  }, 200);
 }
 
 /** @param {import("fastify").FastifyInstance} fastify */

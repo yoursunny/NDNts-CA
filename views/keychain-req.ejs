@@ -20,6 +20,7 @@ This is a certificate request for <kbd><%= helper.altUri(name) %></kbd>, with Va
 </fieldset>
 </form>
 
+<section>
 <h2>Obtain certificate from ndnsec</h2>
 <p>
 If you have a parent key in ndn-cxx KeyChain, you may create a certificate with <kbd>ndnsec cert-gen</kbd> command.
@@ -35,12 +36,30 @@ EOT
 <p>Once you have obtained the certificate, enter it here:</p>
 <form action="keychain-insert-cert.cgi" method="post" class="pure-form">
 <fieldset>
-<textarea rows="6" cols="70" style="font-family:monospace;" name="cert" required placeholder="base64 certificate"></textarea>
+<textarea rows="6" cols="70" name="cert" required placeholder="base64 certificate"></textarea>
 </fieldset>
 <button type="submit" class="pure-button pure-button-primary">Save</button>
 </form>
+</section>
 
-<h2>Obtain certificate from NDN Testbed Authority</h2>
+<% if (isNdnTestbed) { -%>
+<section>
+<h2>Obtain certificate from NDN Testbed root CA</h2>
+<p>
+You may request a certificate from <a href="https://gist.github.com/tianyuan129/dc97822f263612dd2a4df288fcbb3bc7">NDN Testbed root CA</a>.
+This requires receiving a verification code via email.
+You may use any email address to pass the verification.
+</p>
+<form action="keychain-testbed-client-new.cgi" method="post" class="pure-form">
+<input type="hidden" name="name" value="<%= name.valueHex %>">
+<fieldset>
+<input name="email" type="email" required placeholder="email">
+<button type="submit" class="pure-button pure-button-primary">Begin</button>
+</form>
+</section>
+
+<section>
+<h2>Obtain certificate from legacy NDN Testbed Authority</h2>
 <p>
 You may request a certificate from <a href="https://ndncert.named-data.net/">ndncert-legacy system</a>.
 The subject name of this key is <kbd><%= helper.altUri(subjectName) %></kbd>.
@@ -50,10 +69,12 @@ If ndncert-legacy suggested a different subject name (on <kdb>ndnsec-keygen</kdb
 <p>Once you have received an email saying that your certificate is approved, paste the email body here:</p>
 <form action="keychain-download-ndncert-legacy.cgi" method="post" class="pure-form">
 <fieldset>
-<textarea rows="6" cols="70" style="font-family:monospace;" name="email" required placeholder="This must contain https://ndncert.named-data.net/cert/get/ &#x2026;"></textarea>
+<textarea rows="6" cols="70" name="email" required placeholder="This must contain https://ndncert.named-data.net/cert/get/ &#x2026;"></textarea>
 </fieldset>
 <button type="submit" class="pure-button pure-button-primary">Download and Import</button>
 </form>
+</section>
+<% } -%>
 
 </main>
 

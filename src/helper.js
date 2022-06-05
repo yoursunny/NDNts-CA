@@ -69,6 +69,7 @@ export function template(view, options) {
 const MESSAGE_NEXT = {
   home: "location = './'",
   back: "history.back()",
+  reload: "location.reload()",
 };
 
 /**

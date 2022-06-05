@@ -1,0 +1,22 @@
+<%- include("_header") %>
+
+<main>
+
+<h1>Enter PIN</h1>
+<p>You are requesting a certificate from NDN testbed root CA:</p>
+<ul>
+<li>request ID: <%= helper.toHex(requestId) %></li>
+<li>certificate request name: <%= helper.altUri(certRequestName) %></li>
+<li>remaining tries: <%= remainingTries %></li>
+</ul>
+
+<p>You have been emailed a verification code, enter it below:</p>
+<form action="keychain-testbed-client-enter-pin.cgi" method="post" class="pure-form">
+<fieldset>
+<input name="pin" type="text" required placeholder="000000">
+<button type="submit" class="pure-button pure-button-primary">Submit</button>
+</form>
+
+</main>
+
+<%- include("_footer") %>
