@@ -61,9 +61,7 @@ export function certFromBase64(input) {
  * @returns {(...args: Parameters<import("fastify").RouteHandler>) => void}
  */
 export function template(view, options) {
-  return (req, reply) => {
-    reply.view(view, options);
-  };
+  return (req, reply) => reply.view(view, options);
 }
 
 const MESSAGE_NEXT = {

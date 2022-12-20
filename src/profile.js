@@ -11,8 +11,7 @@ const { promises: fs } = gracefulfs;
 /** @type {import("fastify").RouteHandler} */
 async function download(req, reply) {
   if (!profile) {
-    reply.status(404);
-    return;
+    return reply.status(404);
   }
   reply.header("Content-Type", "application/octet-stream");
   reply.send(Buffer.from(Encoder.encode(profile.data)));
@@ -29,8 +28,7 @@ async function newForm(req, reply) {
 async function newSubmit(req, reply) {
   const challenges = ["nop", "pin"].filter((challenge) => req.body[`challenge-${challenge}`] === "1");
   if (challenges.length === 0) {
-    message("At least one challenge is required.", { next: "back" })(req, reply);
-    return;
+    return message("At least one challenge is required.", { next: "back" })(req, reply);
   }
 
   const cert = await keyChain.getCert(nameFromHex(req.body.cert));
@@ -47,8 +45,6 @@ async function newSubmit(req, reply) {
   });
   await fs.writeFile(env.profile, Encoder.encode(profile.data));
 
-  message("Profile saved, restarting server.")(req, reply);
-
   setTimeout(async () => {
     const certName = cert.name.toString();
     await modifyEnv({
@@ -58,6 +54,8 @@ async function newSubmit(req, reply) {
       CA_CHALLENGES: challenges.join(","),
     });
   }, 200);
+
+  return message("Profile saved, restarting server.")(req, reply);
 }
 
 /** @param {import("fastify").FastifyInstance} fastify */

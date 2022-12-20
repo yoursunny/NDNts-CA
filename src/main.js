@@ -1,9 +1,10 @@
+import path from "node:path";
+
 import FastifyFormbody from "@fastify/formbody";
 import FastifyStatic from "@fastify/static";
+import FastifyView from "@fastify/view";
 import ejs from "ejs";
 import Fastify from "fastify";
-import path from "node:path";
-import PointOfView from "point-of-view";
 
 import { register as certsRoutes } from "./certs.js";
 import { env, initialize, profile, recentPinRequests } from "./env.js";
@@ -17,8 +18,8 @@ await initialize();
 const fastify = Fastify({
   logger: true,
 });
-fastify.register(FastifyFormbody);
-fastify.register(PointOfView, {
+await fastify.register(FastifyFormbody);
+await fastify.register(FastifyView, {
   engine: { ejs },
   root: path.resolve(process.cwd(), "views"),
   viewExt: "ejs",
@@ -40,7 +41,7 @@ fastify.setErrorHandler((err, req, reply) => {
   reply.status(400);
   message(err.toString(), { title: "Error", next: "back" })(req, reply);
 });
-fastify.register(FastifyStatic, {
+await fastify.register(FastifyStatic, {
   root: path.resolve(process.cwd(), "public"),
 });
 fastify.listen({
