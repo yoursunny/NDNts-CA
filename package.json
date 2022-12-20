@@ -13,6 +13,7 @@
     "@fastify/static": "^6.6.0",
     "@fastify/view": "^7.3.0",
     "@ndn/cli-common": "https://ndnts-nightly.ndn.today/cli-common.tgz",
+    "@ndn/endpoint": "https://ndnts-nightly.ndn.today/endpoint.tgz",
     "@ndn/keychain": "https://ndnts-nightly.ndn.today/keychain.tgz",
     "@ndn/naming-convention2": "https://ndnts-nightly.ndn.today/naming-convention2.tgz",
     "@ndn/ndncert": "https://ndnts-nightly.ndn.today/ndncert.tgz",

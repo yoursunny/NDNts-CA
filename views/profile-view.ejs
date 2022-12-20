@@ -6,7 +6,10 @@
 
 <% if (profile) { -%>
 <pre><%= profile %></pre>
-<p><a class="pure-button pure-button-primary" href="profile.data">Download CA Profile</a></p>
+<p>
+<a class="pure-button pure-button-primary" href="profile.data">Download CA Profile</a>
+<a class="pure-button" href="profile-intermediates.txt">List intermediates</a>
+</p>
 <% } else { -%>
 <p>Certificate Authority inactive.</p>
 <% } -%>

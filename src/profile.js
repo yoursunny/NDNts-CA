@@ -18,6 +18,14 @@ async function download(req, reply) {
 }
 
 /** @type {import("fastify").RouteHandler} */
+function listIntermediates(req, reply) {
+  if (!profile) {
+    return reply.status(404);
+  }
+  return reply.redirect(`keychain-intermediates.txt?name=${profile.cert.name.valueHex}`);
+}
+
+/** @type {import("fastify").RouteHandler} */
 async function newForm(req, reply) {
   return template("profile-new", {
     certNames: await keyChain.listCerts(),
@@ -62,6 +70,7 @@ async function newSubmit(req, reply) {
 export function register(fastify) {
   fastify.get("/profile.html", template("profile-view"));
   fastify.get("/profile.data", download);
+  fastify.get("/profile-intermediates.txt", listIntermediates);
 
   fastify.get("/profile-new.html", newForm);
   fastify.post("/profile-new.cgi", newSubmit);

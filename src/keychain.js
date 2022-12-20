@@ -1,8 +1,9 @@
+import { Endpoint } from "@ndn/endpoint";
 import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCertificate, requestProbe, retrieveCaProfile } from "@ndn/ndncert";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
-import { Name } from "@ndn/packet";
+import { Interest, Name } from "@ndn/packet";
 import { toUtf8 } from "@ndn/util";
 import got from "got";
 import gracefulfs from "graceful-fs";
@@ -51,6 +52,26 @@ async function genKey(req, reply) {
   const curve = req.body.curve;
   const [privateKey] = await generateSigningKey(keyChain, name, ECDSA, { curve });
   return message(`Key ${AltUri.ofName(privateKey.name)} generated.`, nextList)(req, reply);
+}
+
+/** @type {import("fastify").RouteHandler<{ Querystring: { name: string } }>} */
+async function listIntermediates(req, reply) {
+  const name = nameFromHex(String(req.query.name));
+  let cert = await keyChain.getCert(name);
+  reply.header("Content-Type", "text/plain");
+  const certNames = [];
+  const endpoint = new Endpoint();
+  while (cert && !cert.isSelfSigned) {
+    certNames.push(cert.name);
+    try {
+      const interest = new Interest(cert.issuer, Interest.CanBePrefix, Interest.MustBeFresh);
+      cert = Certificate.fromData(await endpoint.consume(interest));
+    } catch (err) {
+      req.log.warn(err);
+      break;
+    }
+  }
+  return reply.send(certNames.join("\n"));
 }
 
 /** @type {import("fastify").RouteHandler<{ Querystring: Record<"name"|"days", string> }>} */
@@ -215,6 +236,7 @@ export function register(fastify) {
   fastify.get("/keychain-gen.html", template("keychain-gen"));
   fastify.post("/keychain-gen.cgi", genKey);
 
+  fastify.get("/keychain-intermediates.txt", listIntermediates);
   fastify.get("/keychain-req.html", reqForm);
   fastify.post("/keychain-insert-cert.cgi", insertCert);
   fastify.post("/keychain-download-ndncert-legacy.cgi", downloadNdncertLegacy);
