@@ -1,8 +1,9 @@
 import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
-import { ClientEmailChallenge, importClientConf, requestCertificate } from "@ndn/ndncert";
+import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCertificate, requestProbe, retrieveCaProfile } from "@ndn/ndncert";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Name } from "@ndn/packet";
+import { toUtf8 } from "@ndn/util";
 import got from "got";
 import gracefulfs from "graceful-fs";
 
@@ -104,37 +105,59 @@ async function downloadNdncertLegacy(req, reply) {
  */
 let testbedClientContext;
 
-/** @type {import("fastify").RouteHandler<{ Body: { name: string, email: string } }>} */
+/** @type {import("fastify").RouteHandler<{ Body: { name: string, probe: string, email: string } }>} */
 async function testbedClientBegin(req, reply) {
   const name = nameFromHex(String(req.body.name));
   const { signer, verifier } = await keyChain.getKeyPair(name);
-  const email = String(req.body.email);
+  const probeEmail = String(req.body.probe);
+  const challengeEmail = String(req.body.email);
 
   const clientConf = await fs.readFile(new URL("testbed-root-clientconf.json", import.meta.url), { encoding: "utf8" });
-  const profile = await importClientConf(JSON.parse(clientConf));
+  let profile = await importClientConf(JSON.parse(clientConf));
   testbedClientContext?.abort.abort();
   testbedClientContext = {
     abort: new AbortController(),
   };
   (async () => {
+    let inbox;
     try {
+      if (probeEmail) {
+        const probeResponse = await requestProbe({
+          profile,
+          parameters: { email: toUtf8(probeEmail) },
+        });
+        if (probeResponse.redirects.length > 0) {
+          profile = await retrieveCaProfile({
+            caCertFullName: probeResponse.redirects[0].caCertFullName,
+          });
+        }
+      }
+
+      let challenge;
+      if (challengeEmail) {
+        challenge = new ClientEmailChallenge(challengeEmail, (ctx) => new Promise((resolve, reject) => {
+          testbedClientContext.ctx = ctx;
+          testbedClientContext.enter = resolve;
+          testbedClientContext.abort.signal.addEventListener("abort", reject);
+        }));
+      } else {
+        inbox = await ClientEmailInboxImap.createEthereal();
+        challenge = new ClientEmailChallenge(inbox.address, inbox.promptCallback);
+      }
+
       testbedClientContext.cert = await requestCertificate({
         profile,
         privateKey: signer,
         publicKey: verifier,
-        challenges: [
-          new ClientEmailChallenge(email, (ctx) => new Promise((resolve, reject) => {
-            testbedClientContext.ctx = ctx;
-            testbedClientContext.enter = resolve;
-            testbedClientContext.abort.signal.addEventListener("abort", reject);
-          })),
-        ],
+        challenges: [challenge],
       });
       await keyChain.insertCert(testbedClientContext.cert);
     } catch (err) {
       if (testbedClientContext) {
         testbedClientContext.fail = err.toString();
       }
+    } finally {
+      inbox?.close();
     }
   })();
   return reply.redirect("keychain-testbed-client-status.html");
