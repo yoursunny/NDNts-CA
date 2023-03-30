@@ -66,23 +66,6 @@ If you leave <i>challenge email</i> box empty, a test account from Ethereal Emai
 <button type="submit" class="pure-button pure-button-primary">Begin</button>
 </form>
 </section>
-
-<section>
-<h2>Obtain certificate from legacy NDN Testbed Authority</h2>
-<p>
-You may request a certificate from <a href="https://ndncert.named-data.net/">ndncert-legacy system</a>.
-The subject name of this key is <kbd><%= helper.altUri(subjectName) %></kbd>.
-If ndncert-legacy suggested a different subject name (on <kdb>ndnsec-keygen</kdb> line), <a href="keychain-gen.html">generate a new key</a> and make certificate request from that key instead.
-</p>
-
-<p>Once you have received an email saying that your certificate is approved, paste the email body here:</p>
-<form action="keychain-download-ndncert-legacy.cgi" method="post" class="pure-form">
-<fieldset>
-<textarea rows="6" cols="70" name="email" required placeholder="This must contain https://ndncert.named-data.net/cert/get/ &#x2026;"></textarea>
-</fieldset>
-<button type="submit" class="pure-button pure-button-primary">Download and Import</button>
-</form>
-</section>
 <% } -%>
 
 </main>

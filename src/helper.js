@@ -75,7 +75,7 @@ const MESSAGE_NEXT = {
  * @param {string} message
  * @param {object} opts
  * @param {string} [opts.title]
- * @param {"home"|"back"|string} [opts.next]
+ * @param {"home"|"back"|"reload"|string} [opts.next]
  * @returns {(...args: Parameters<import("fastify").RouteHandler>) => void}
  */
 export function message(message, opts = {}) {

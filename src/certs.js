@@ -32,8 +32,9 @@ async function act(req, reply) {
       await repo.delete(...names);
       return message(`${numd(names.length, "certificate", "certificates")} deleted.`, nextList)(req, reply);
     }
-    default:
+    default: {
       throw new Error("unknown action");
+    }
   }
 }
 

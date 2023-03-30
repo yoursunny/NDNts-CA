@@ -5,7 +5,6 @@ import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCe
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Interest, Name } from "@ndn/packet";
 import { toUtf8 } from "@ndn/util";
-import got from "got";
 import gracefulfs from "graceful-fs";
 
 const { promises: fs } = gracefulfs;
@@ -98,19 +97,6 @@ async function reqForm(req, reply) {
 /** @type {import("fastify").RouteHandler<{ Body: { cert: string } }>} */
 async function insertCert(req, reply) {
   const cert = certFromBase64(req.body.cert);
-  await keyChain.insertCert(cert);
-  return message(`Certificate ${AltUri.ofName(cert.name)} installed.`, nextList)(req, reply);
-}
-
-/** @type {import("fastify").RouteHandler<{ Body: { email: string } }>} */
-async function downloadNdncertLegacy(req, reply) {
-  const email = String(req.body.email);
-  const m = email.match(/(https:\/\/ndncert\.named-data\.net\/cert\/get\/[^"]+)"?/);
-  if (!m) {
-    throw new Error("Certificate name not found in email.");
-  }
-  const response = await got(m[1]);
-  const cert = certFromBase64(response.body);
   await keyChain.insertCert(cert);
   return message(`Certificate ${AltUri.ofName(cert.name)} installed.`, nextList)(req, reply);
 }
@@ -239,7 +225,6 @@ export function register(fastify) {
   fastify.get("/keychain-intermediates.txt", listIntermediates);
   fastify.get("/keychain-req.html", reqForm);
   fastify.post("/keychain-insert-cert.cgi", insertCert);
-  fastify.post("/keychain-download-ndncert-legacy.cgi", downloadNdncertLegacy);
 
   fastify.post("/keychain-testbed-client-new.cgi", testbedClientBegin);
   fastify.get("/keychain-testbed-client-status.html", testbedClientStatus);
