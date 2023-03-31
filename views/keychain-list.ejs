@@ -6,7 +6,7 @@
 
 <table class="pure-table pure-table-horizontal">
 <thead>
-<tr><th colspan="2">name</th><th style="min-width: 30%;">actions</th></tr>
+<tr><th colspan="2">name / issuer / validity</th><th style="min-width: 30%;">actions</th></tr>
 </thead>
 <tbody>
 <% for (const keyName of keyNames) { -%>
@@ -27,17 +27,21 @@
     </form>
   </td>
 </tr>
-<% for (const certName of certNames.filter((n) => keyName.isPrefixOf(n))) { -%>
+<% for (const cert of certs.filter(({ name }) => keyName.isPrefixOf(name))) { -%>
 <tr>
   <td>&nbsp;</td>
-  <td><%= helper.altUri(certName) %></td>
   <td>
-    <form action="keychain-delete-cert.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete certificate <%= helper.altUri(certName) %>?')">
-      <input type="hidden" name="name" value="<%= certName.valueHex %>">
+    <%= helper.altUri(cert.name) %>
+    <br/>
+    <small><%= helper.altUri(helper.CertNaming.toSubjectName(cert.issuer)) %> <%= cert.validity %></small>
+  </td>
+  <td>
+    <form action="keychain-delete-cert.cgi" method="post" onsubmit="return confirm('Are you sure you want to delete certificate <%= helper.altUri(cert.name) %>?')">
+      <input type="hidden" name="name" value="<%= cert.name.valueHex %>">
       <button type="submit" class="pure-button" title="delete certificate">delete</button>
     </form>
     <form action="keychain-intermediates.txt" method="get">
-      <input type="hidden" name="name" value="<%= certName.valueHex %>">
+      <input type="hidden" name="name" value="<%= cert.name.valueHex %>">
       <button type="submit" class="pure-button" title="delete certificate">intermediates</button>
     </form>
   </td>

@@ -18,7 +18,7 @@ const nextList = { next: "keychain-list.html" };
 async function list(req, reply) {
   return template("keychain-list", {
     keyNames: await keyChain.listKeys(),
-    certNames: await keyChain.listCerts(),
+    certs: await Promise.all((await keyChain.listCerts()).map((name) => keyChain.getCert(name))),
   })(req, reply);
 }
 
@@ -182,7 +182,7 @@ async function testbedClientStatus(req, reply) {
   }
   if (cert) {
     testbedClientContext = undefined;
-    return message(`Certificate ${AltUri.ofName(cert.name)} installed.`, nextList)(req, reply);
+    return message(`Certificate ${AltUri.ofName(cert.name)} (${cert.validity}) installed.`, nextList)(req, reply);
   }
   if (!ctx) {
     return message("NDNCERT client running, please wait.", { next: "reload" })(req, reply);
