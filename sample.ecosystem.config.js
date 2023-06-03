@@ -4,7 +4,7 @@ module.exports = {
   apps: [
     {
       name: "NDNts-CA",
-      script: "./server.js",
+      script: "./src/main.js",
       env: {
         NODE_ENV: "production",
       },

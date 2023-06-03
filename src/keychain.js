@@ -1,3 +1,5 @@
+import fs from "node:fs/promises";
+
 import { Endpoint } from "@ndn/endpoint";
 import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
@@ -5,9 +7,6 @@ import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCe
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Interest, Name } from "@ndn/packet";
 import { toUtf8 } from "@ndn/util";
-import gracefulfs from "graceful-fs";
-
-const { promises: fs } = gracefulfs;
 
 import { keyChain } from "./env.js";
 import { certFromBase64, message, nameFromHex, template } from "./helper.js";

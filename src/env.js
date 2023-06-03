@@ -1,3 +1,5 @@
+import fs from "node:fs/promises";
+
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
 import { C as ndncertC, CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data, FwHint } from "@ndn/packet";
@@ -6,10 +8,8 @@ import { Decoder } from "@ndn/tlv";
 import strattadbEnvironment from "@strattadb/environment";
 import dotenv from "dotenv";
 import * as envfile from "envfile";
-import gracefulfs from "graceful-fs";
 import leveldown from "leveldown";
 
-const { promises: fs } = gracefulfs;
 const { makeEnv, parsers } = strattadbEnvironment;
 
 dotenv.config();

@@ -1,12 +1,11 @@
+import fs from "node:fs/promises";
+
 import { CertNaming } from "@ndn/keychain";
 import { CaProfile } from "@ndn/ndncert";
 import { Encoder } from "@ndn/tlv";
-import gracefulfs from "graceful-fs";
 
 import { env, keyChain, modifyEnv, profile } from "./env.js";
 import { message, nameFromHex, template } from "./helper.js";
-
-const { promises: fs } = gracefulfs;
 
 /** @type {import("fastify").RouteHandler} */
 async function download(req, reply) {
@@ -61,7 +60,7 @@ async function newSubmit(req, reply) {
       CA_KEY: certName,
       CA_CHALLENGES: challenges.join(","),
     });
-  }, 200);
+  }, 1000);
 
   return message("Profile saved, restarting server.")(req, reply);
 }
