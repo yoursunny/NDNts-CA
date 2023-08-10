@@ -116,7 +116,7 @@ function makeChallenge(id) {
     case "pin": {
       const challenge = new ServerPinChallenge();
       recentPinRequests = [];
-      challenge.on("newpin", (requestId, pin) => {
+      challenge.addEventListener("newpin", ({ requestId, pin }) => {
         recentPinRequests.unshift({ requestId, pin });
         recentPinRequests.splice(20, Infinity);
       });
