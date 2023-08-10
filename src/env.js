@@ -5,12 +5,12 @@ import { C as ndncertC, CaProfile, Server, ServerNopChallenge, ServerPinChalleng
 import { Data, FwHint } from "@ndn/packet";
 import { DataStore, PrefixRegStatic, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
-import strattadbEnvironment from "@strattadb/environment";
+import sadamsEnvironment from "@sadams/environment";
 import dotenv from "dotenv";
 import * as envfile from "envfile";
 import leveldown from "leveldown";
 
-const { makeEnv, parsers } = strattadbEnvironment;
+const { makeEnv, parsers } = sadamsEnvironment;
 
 dotenv.config();
 

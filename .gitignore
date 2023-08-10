@@ -1,6 +1,5 @@
 .env
 .vscode
-anyfiddle.json
 ecosystem.config.js
 node_modules/
 package-lock.json

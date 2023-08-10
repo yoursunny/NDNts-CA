@@ -23,7 +23,7 @@
     "@ndn/repo": "https://ndnts-nightly.ndn.today/repo.tgz",
     "@ndn/tlv": "https://ndnts-nightly.ndn.today/tlv.tgz",
     "@ndn/util": "https://ndnts-nightly.ndn.today/util.tgz",
-    "@strattadb/environment": "^8.0.2",
+    "@sadams/environment": "^9.0.0",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "envfile": "^6.18.0",
