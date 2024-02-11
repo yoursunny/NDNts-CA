@@ -10,8 +10,8 @@ It is great for:
 
 System requirements:
 
-* Node.js 18.x
-* Windows 10, Debian 11, or Ubuntu 20.04
+* Node.js 20.x
+* Windows 10, Debian 12, or Ubuntu 22.04
 
 Setup steps:
 
@@ -23,11 +23,9 @@ Setup steps:
 
 To obtain an NDN testbed certificate and start issuing sub-certificates:
 
-1. Open [NDNCERT-legacy](https://ndncert.named-data.net/), enter your email and select "guest certificate".
-2. When prompted to run `ndnsec-keygen`, generate a key on Personal CA "manage CA keychain" page instead.
-   Then, click "request cert" and copy-paste the certificate request into NDNCERT-legacy.
-3. When you get email to install issued certificate, copy-paste the email into the "request cert" page.
-4. Go to Personal CA "create new CA profile" page, and select the testbed certificate.
+1. Go to "keychain" page, create a key within testbed name hierarchy.
+2. Click "request cert" to request a certificate from testbed CA.
+3. Go to "create new CA profile" page, and select the testbed certificate.
 
 You can then obtain sub-certificates from this Personal CA using one of these methods:
 

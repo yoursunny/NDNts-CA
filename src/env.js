@@ -130,10 +130,8 @@ function cleanup() {
   if (server) {
     server.close();
   }
-  if (repoProducer) {
-    repoProducer.close();
-  }
-  repo.close();
+  repoProducer?.[Symbol.dispose]();
+  repo[Symbol.dispose]();
   closeUplinks();
 }
 
