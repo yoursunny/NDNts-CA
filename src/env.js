@@ -3,12 +3,11 @@ import fs from "node:fs/promises";
 import { closeUplinks, openKeyChain, openUplinks } from "@ndn/cli-common";
 import { C as ndncertC, CaProfile, Server, ServerNopChallenge, ServerPinChallenge } from "@ndn/ndncert";
 import { Data, FwHint } from "@ndn/packet";
-import { DataStore, PrefixRegStatic, RepoProducer } from "@ndn/repo";
+import { makePersistentDataStore, PrefixRegStatic, RepoProducer } from "@ndn/repo";
 import { Decoder } from "@ndn/tlv";
 import sadamsEnvironment from "@sadams/environment";
 import dotenv from "dotenv";
 import * as envfile from "envfile";
-import leveldown from "leveldown";
 
 const { makeEnv, parsers } = sadamsEnvironment;
 
@@ -58,7 +57,7 @@ export async function modifyEnv(changes) {
 
 export const keyChain = openKeyChain();
 
-export const repo = new DataStore(leveldown(env.repo));
+export const repo = await makePersistentDataStore(env.repo);
 
 /** @type {RepoProducer|undefined} */
 let repoProducer;
