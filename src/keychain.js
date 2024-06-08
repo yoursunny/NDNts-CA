@@ -1,11 +1,12 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 
-import { Endpoint } from "@ndn/endpoint";
-import { Certificate, CertNaming, ECDSA, generateSigningKey, ValidityPeriod } from "@ndn/keychain";
+import { consume } from "@ndn/endpoint";
+import { Certificate, CertNaming, ECDSA, generateSigningKey } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
 import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCertificate, requestProbe, retrieveCaProfile } from "@ndn/ndncert";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
-import { Interest, Name } from "@ndn/packet";
+import { Interest, Name, ValidityPeriod } from "@ndn/packet";
 import { toUtf8 } from "@ndn/util";
 
 import { keyChain } from "./env.js";
@@ -58,12 +59,11 @@ async function listIntermediates(req, reply) {
   let cert = await keyChain.getCert(name);
   reply.header("Content-Type", "text/plain");
   const certNames = [];
-  const endpoint = new Endpoint();
   while (cert && !cert.isSelfSigned) {
     certNames.push(cert.name);
     try {
       const interest = new Interest(cert.issuer, Interest.CanBePrefix, Interest.MustBeFresh);
-      cert = Certificate.fromData(await endpoint.consume(interest));
+      cert = Certificate.fromData(await consume(interest));
     } catch (err) {
       req.log.warn(err);
       break;
@@ -118,7 +118,7 @@ async function testbedClientBegin(req, reply) {
   const probeEmail = String(req.body.probe);
   const challengeEmail = String(req.body.email);
 
-  const clientConf = await fs.readFile(new URL("testbed-root-clientconf.json", import.meta.url), { encoding: "utf8" });
+  const clientConf = await fs.readFile(path.join(import.meta.dirname, "testbed-root-clientconf.json"), { encoding: "utf8" });
   let profile = await importClientConf(JSON.parse(clientConf));
   testbedClientContext?.abort.abort();
   testbedClientContext = {

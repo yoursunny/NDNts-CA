@@ -1,5 +1,5 @@
-import { Certificate, createVerifier, ValidityPeriod } from "@ndn/keychain";
-import { Component } from "@ndn/packet";
+import { Certificate, createVerifier } from "@ndn/keychain";
+import { Component, ValidityPeriod } from "@ndn/packet";
 
 import { keyChain, repo } from "./env.js";
 import { certFromBase64, nameFromHex, template } from "./helper.js";

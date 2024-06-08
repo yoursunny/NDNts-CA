@@ -125,17 +125,17 @@ function makeChallenge(id) {
   throw new Error(`unknown challenge ${id}`);
 }
 
-function cleanup() {
+async function cleanup() {
   if (server) {
     server.close();
   }
   repoProducer?.[Symbol.dispose]();
-  repo[Symbol.dispose]();
+  await repo[Symbol.asyncDispose]();
   closeUplinks();
 }
 
-process.once("SIGUSR2", () => {
-  cleanup();
+process.once("SIGUSR2", async () => {
+  await cleanup();
   setTimeout(() => process.exit(), 500);
 });
 process.once("beforeExit", cleanup);
