@@ -7,11 +7,11 @@
     "start": "nodemon -w .env -w src src/main.js",
     "typecheck": "tsc"
   },
-  "packageManager": "pnpm@9.2.0+sha256.94fab213df221c55b6956b14a2264c21c6203cca9f0b3b95ff2fe9b84b120390",
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
   "dependencies": {
-    "@fastify/formbody": "^7.4.0",
-    "@fastify/static": "^7.0.4",
-    "@fastify/view": "^9.1.0",
+    "@fastify/formbody": "^8.0.1",
+    "@fastify/static": "^8.0.3",
+    "@fastify/view": "^10.0.1",
     "@ndn/cli-common": "https://ndnts-nightly.ndn.today/cli-common.tgz",
     "@ndn/endpoint": "https://ndnts-nightly.ndn.today/endpoint.tgz",
     "@ndn/keychain": "https://ndnts-nightly.ndn.today/keychain.tgz",
@@ -28,17 +28,17 @@
     "ejs": "^3.1.10",
     "envfile": "^7.1.0",
     "fast-chunk-string": "^1.0.1",
-    "fastify": "^4.27.0",
-    "nodemon": "^3.1.3",
+    "fastify": "^5.1.0",
+    "nodemon": "^3.1.7",
     "numd": "^3.1.0"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.5",
     "@types/fast-chunk-string": "^1.0.3",
-    "@types/node": "^20.14.2",
-    "@typescript/lib-dom": "npm:@types/web@0.0.148",
-    "@yoursunny/xo-config": "0.58.0",
-    "typescript": "~5.4.5"
+    "@types/node": "^22.9.1",
+    "@typescript/lib-dom": "npm:@types/web@0.0.182",
+    "@yoursunny/xo-config": "0.59.0",
+    "typescript": "~5.6.3"
   },
   "engines": {
     "node": "^20.11.0"

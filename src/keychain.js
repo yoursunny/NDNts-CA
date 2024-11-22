@@ -4,7 +4,7 @@ import path from "node:path";
 import { consume } from "@ndn/endpoint";
 import { Certificate, CertNaming, ECDSA, generateSigningKey } from "@ndn/keychain";
 import { AltUri } from "@ndn/naming-convention2";
-import { ClientEmailChallenge, ClientEmailInboxImap, importClientConf, requestCertificate, requestProbe, retrieveCaProfile } from "@ndn/ndncert";
+import { ClientEmailChallenge, importClientConf, requestCertificate, requestProbe, retrieveCaProfile } from "@ndn/ndncert";
 import { NdnsecKeyChain } from "@ndn/ndnsec";
 import { Interest, Name, ValidityPeriod } from "@ndn/packet";
 import { toUtf8 } from "@ndn/util";
@@ -125,7 +125,6 @@ async function testbedClientBegin(req, reply) {
     abort: new AbortController(),
   };
   (async () => {
-    let inbox;
     try {
       if (probeEmail) {
         const probeResponse = await requestProbe({
@@ -139,17 +138,11 @@ async function testbedClientBegin(req, reply) {
         }
       }
 
-      let challenge;
-      if (challengeEmail) {
-        challenge = new ClientEmailChallenge(challengeEmail, (ctx) => new Promise((resolve, reject) => {
-          testbedClientContext.ctx = ctx;
-          testbedClientContext.enter = resolve;
-          testbedClientContext.abort.signal.addEventListener("abort", reject);
-        }));
-      } else {
-        inbox = await ClientEmailInboxImap.createEthereal();
-        challenge = new ClientEmailChallenge(inbox.address, inbox.promptCallback);
-      }
+      const challenge = new ClientEmailChallenge(challengeEmail, (ctx) => new Promise((resolve, reject) => {
+        testbedClientContext.ctx = ctx;
+        testbedClientContext.enter = resolve;
+        testbedClientContext.abort.signal.addEventListener("abort", reject);
+      }));
 
       testbedClientContext.cert = await requestCertificate({
         profile,
@@ -162,8 +155,6 @@ async function testbedClientBegin(req, reply) {
       if (testbedClientContext) {
         testbedClientContext.fail = err.toString();
       }
-    } finally {
-      inbox?.close();
     }
   })();
   return reply.redirect("keychain-testbed-client-status.html");

@@ -56,13 +56,12 @@ The subject name of this key must start with the site CA prefix, otherwise the i
 NDN Testbed CA only supports email challenge that involves receiving a verification code via email.
 You can enter your email address in <i>challenge email</i> box.
 You must be able to receive at this address, and you will be prompted for the verification code.
-If you leave <i>challenge email</i> box empty, a test account from Ethereal Email will be used, and the challenge can be solved automatically.
 </p>
 <form action="keychain-testbed-client-new.cgi" method="post" class="pure-form">
 <input type="hidden" name="name" value="<%= name.valueHex %>">
 <fieldset>
 <input name="probe" type="email" placeholder="probe email">
-<input name="email" type="email" placeholder="challenge email">
+<input name="email" type="email" required placeholder="challenge email">
 <button type="submit" class="pure-button pure-button-primary">Begin</button>
 </form>
 </section>
